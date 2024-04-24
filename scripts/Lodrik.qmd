@@ -1,5 +1,53 @@
 ```{r}
 source(here::here("scripts", "setup.R"))
-data <- read.csv(here("data", "data export 20240424.csv"), sep = ";")
-head(data)
+# data <- read.csv(here("data", "data export 20240424.csv"), sep = ";")
+# summary(data)
 ```
+
+```{r}
+library(readr)
+library(dplyr)
+library(lubridate)
+library(forecast)
+library(fable)
+library(stringr)  # Ensure this library is loaded
+
+# Load the data
+data <- read.csv(here("data", "data export 20240424.csv"),
+                 sep = ";",  # Specify the separator as semicolon
+                 stringsAsFactors = FALSE)
+
+# Replace periods with underscores in column names
+names(data) <- gsub("\\.", "_", names(data))
+
+# Check the updated column names
+print(names(data))
+
+# Preprocessing
+data <- data %>%
+  mutate(Month = str_replace_all(Month, setNames(
+    c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"),
+    c("janvier", "février", "mars", "avril", "mai", "juin", 
+      "juillet", "août", "septembre", "octobre", "novembre", "décembre")
+  ))) %>%
+  mutate(Month = myd(Month),
+         `Coal Production (Quadrillion Btu)` = as.numeric(str_replace(`Coal Production (Quadrillion Btu)`, ",", ".")))
+
+# Convert to tsibble
+data_tsibble <- as_tsibble(data, index = Month)
+
+# Check stationarity
+adf_test(data_tsibble$`Coal Production (Quadrillion Btu)`)
+
+# Fit ARIMA model
+model <- data_tsibble %>%
+  model(ARIMA(`Coal Production (Quadrillion Btu)` ~ PDQ(1, 1, 1) + season(PDQ(1, 1, 1))))
+
+# Forecast
+forecast <- model %>%
+  forecast(h = "2 years")
+
+# Plot
+autoplot(forecast)
+```
+

@@ -85,99 +85,60 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>here() starts at /Users/lodrik/Documents/GitHub/F2_Project2</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"data export 20240424.csv"</span>), <span class="at">sep =</span> <span class="st">";"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>         Month Coal.Production..Quadrillion.Btu.
-1 1973 janvier                          1,166486
-2 1973 février                          1,086072
-3    1973 mars                          1,196571
-4   1973 avril                           1,11223
-5     1973 mai                          1,216978
-6    1973 juin                          1,103861
-  Natural.Gas..Dry..Production..Quadrillion.Btu.
-1                                       1,908249
-2                                       1,922543
-3                                        1,86843
-4                                       1,777561
-5                                       1,859241
-6                                       1,802065
-  Crude.Oil.Production..Quadrillion.Btu.
-1                               1,649833
-2                               1,525783
-3                               1,667094
-4                               1,616791
-5                               1,665377
-6                               1,603224
-  Natural.Gas.Plant.Liquids.Production..Quadrillion.Btu.
-1                                               0,208064
-2                                               0,195184
-3                                               0,214807
-4                                                0,20969
-5                                               0,215398
-6                                               0,206945
-  Total.Fossil.Fuels.Production..Quadrillion.Btu.
-1                                        4,932632
-2                                        4,729582
-3                                        4,946902
-4                                        4,716271
-5                                        4,956995
-6                                        4,716096
-  Nuclear.Electric.Power.Production..Quadrillion.Btu.
-1                                            0,068103
-2                                            0,064634
-3                                            0,072494
-4                                             0,06407
-5                                            0,062111
-6                                            0,073968
-  Hydroelectric.Power.Production..Quadrillion.Btu.
-1                                         0,089562
-2                                         0,079544
-3                                         0,088284
-4                                         0,083152
-5                                         0,085643
-6                                          0,08206
-  Geothermal.Energy.Production..Quadrillion.Btu.
-1                                        0,00049
-2                                       0,000448
-3                                       0,000464
-4                                       0,000542
-5                                       0,000505
-6                                       0,000579
-  Solar.Energy.Production...Quadrillion.Btu.
-1                              Not Available
-2                              Not Available
-3                              Not Available
-4                              Not Available
-5                              Not Available
-6                              Not Available
-  Wind.Energy.Production...Quadrillion.Btu.
-1                             Not Available
-2                             Not Available
-3                             Not Available
-4                             Not Available
-5                             Not Available
-6                             Not Available
-  Biomass.Energy.Production...Quadrillion.Btu.
-1                                     0,129787
-2                                     0,117338
-3                                     0,129938
-4                                     0,125636
-5                                     0,129834
-6                                     0,125611
-  Total.Renewable.Energy.Production...Quadrillion.Btu.
-1                                             0,219839
-2                                              0,19733
-3                                             0,218686
-4                                              0,20933
-5                                             0,215982
-6                                             0,208249
-  Total.Primary.Energy.Production...Quadrillion.Btu.
-1                                           5,220574
-2                                           4,991545
-3                                           5,238082
-4                                           4,989672
-5                                           5,235087
-6                                           4,998313</code></pre>
+<pre><code>    Month           Coal.Production..Quadrillion.Btu.
+ Length:612         Length:612                       
+ Class :character   Class :character                 
+ Mode  :character   Mode  :character                 
+ Natural.Gas..Dry..Production..Quadrillion.Btu.
+ Length:612                                    
+ Class :character                              
+ Mode  :character                              
+ Crude.Oil.Production..Quadrillion.Btu.
+ Length:612                            
+ Class :character                      
+ Mode  :character                      
+ Natural.Gas.Plant.Liquids.Production..Quadrillion.Btu.
+ Length:612                                            
+ Class :character                                      
+ Mode  :character                                      
+ Total.Fossil.Fuels.Production..Quadrillion.Btu.
+ Length:612                                     
+ Class :character                               
+ Mode  :character                               
+ Nuclear.Electric.Power.Production..Quadrillion.Btu.
+ Length:612                                         
+ Class :character                                   
+ Mode  :character                                   
+ Hydroelectric.Power.Production..Quadrillion.Btu.
+ Length:612                                      
+ Class :character                                
+ Mode  :character                                
+ Geothermal.Energy.Production..Quadrillion.Btu.
+ Length:612                                    
+ Class :character                              
+ Mode  :character                              
+ Solar.Energy.Production...Quadrillion.Btu.
+ Length:612                                
+ Class :character                          
+ Mode  :character                          
+ Wind.Energy.Production...Quadrillion.Btu.
+ Length:612                               
+ Class :character                         
+ Mode  :character                         
+ Biomass.Energy.Production...Quadrillion.Btu.
+ Length:612                                  
+ Class :character                            
+ Mode  :character                            
+ Total.Renewable.Energy.Production...Quadrillion.Btu.
+ Length:612                                          
+ Class :character                                    
+ Mode  :character                                    
+ Total.Primary.Energy.Production...Quadrillion.Btu.
+ Length:612                                        
+ Class :character                                  
+ Mode  :character                                  </code></pre>
 </div>
 </div>
 

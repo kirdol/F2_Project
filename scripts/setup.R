@@ -1,7 +1,14 @@
 # load the required packages and install them if they are not.
 packages_loaded <- c(
   "here",
-  "DT"
+  "DT",
+  "fpp3",
+  "stringr",
+  "readr",
+  "dplyr",
+  "lubridate",
+  "forecast",
+  "fable"
 )
 
 # Function that install the packages if not already installed on your computer

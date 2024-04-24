@@ -1,5 +1,6 @@
 # load the required packages and install them if they are not.
 packages_loaded <- c(
+  "here"
 )
 
 # Function that install the packages if not already installed on your computer
@@ -13,4 +14,3 @@ for (pkg in packages_loaded) {
 
 # cleaning of the environment
 rm(pkg)
-

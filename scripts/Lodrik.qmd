@@ -1,0 +1,5 @@
+```{r}
+source(here::here("scripts", "setup.R"))
+data <- read.csv(here("data", "data export 20240424.csv"), sep = ";")
+head(data)
+```

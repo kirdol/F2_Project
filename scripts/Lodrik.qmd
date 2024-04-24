@@ -5,6 +5,8 @@
 ```{r setup, message=FALSE}
 source(here::here("scripts", "setup.R"))
 data <- read.csv(here("data", "data_export_20240424.csv"), sep = ";")
+data <- data %>%
+  mutate_all(~ ifelse(. == "Not Available", 0, .))
 ```
 
 ## Date format
@@ -74,6 +76,49 @@ autoplot(data_tsibble) +
 ## Neural network model for Coal Production (Does not work yet)
 ```{r Neural Network, eval=FALSE}
 library(nnet)
-fit <- nnetar(data, lambda=0)
+fit <- nnetar(data_tsibble, lambda=0)
 autoplot(forecast(fit,h=30))
 ```
+
+## ETS Model for Coal Production (Does not work yet)
+```{r ETS Model, eval=FALSE}
+# Fill implicit gaps in time
+data_tsibble_filled <- data_tsibble %>%
+  fill_gaps()
+
+# Fit ETS model
+fit <- data_tsibble_filled %>%
+  model(ETS(Coal_Production))
+
+# Forecast
+forecast_values <- fit %>%
+  forecast(h = 12)
+
+# Plot forecast
+autoplot(forecast_values)
+```
+
+## Test (Does not work yet)
+
+```{r TEST, eval=FALSE}
+summary(data_tsibble)
+ggplot(data_tsibble, aes(x = Month)) +
+  geom_line(aes(y = Coal_Production), color = "blue") +
+  geom_line(aes(y = Natural_Gas_Dry_Production), color = "red") +
+  geom_line(aes(y = Crude_Oil_Production), color = "green") +
+  geom_line(aes(y = Natural_Gas_Plant_Liquids_Production), color = "orange") +
+  geom_line(aes(y = Total_Fossil_Fuels_Production), color = "purple") +
+  geom_line(aes(y = Nuclear_Electric_Power_Production), color = "black") +
+  geom_line(aes(y = Hydroelectric_Power_Production), color = "brown") +
+  geom_line(aes(y = Geothermal_Energy_Production), color = "pink") +
+  geom_line(aes(y = Solar_Energy_Production), color = "yellow") +
+  geom_line(aes(y = Wind_Energy_Production), color = "grey") +
+  geom_line(aes(y = Biomass_Energy_Production), color = "cyan") +
+  geom_line(aes(y = Total_Renewable_Energy_Production), color = "magenta") +
+  geom_line(aes(y = Total_Primary_Energy_Production), color = "violet") +
+  labs(title = "All Variables Over Time",
+       x = "Time",
+       y = "Value") +
+  theme_minimal()
+```
+

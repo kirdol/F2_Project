@@ -5,11 +5,7 @@ editor: visual
 ---
 
 ```{r}
-data <- read.csv(here("data", "data export 20240424.csv"), sep = ";")
-```
-
-```{r}
-library(dplyr)
+data <- read.csv(here("data", "data_export_20240424.csv"), sep = ";")
 ```
 
 ## Replace "Not Available" with NA
@@ -18,12 +14,12 @@ library(dplyr)
 # Replace "Not Available" with NA in specified columns
 energy_data <- data %>%
   mutate(
-    Solar.Energy.Production...Quadrillion.Btu. = na_if(Solar.Energy.Production...Quadrillion.Btu., "Not Available"),
-    Wind.Energy.Production...Quadrillion.Btu. = na_if(Wind.Energy.Production...Quadrillion.Btu., "Not Available")
+    Solar_Energy_Production = na_if(Solar_Energy_Production, "Not Available"),
+    Wind_Energy_Production = na_if(Wind_Energy_Production, "Not Available")
   )
 
 # Check the structure to ensure changes are applied
 str(energy_data)
 ```
 
-## 
+

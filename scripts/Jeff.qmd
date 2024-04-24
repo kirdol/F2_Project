@@ -1,0 +1,29 @@
+---
+title: "Jeff"
+format: html
+editor: visual
+---
+
+```{r}
+data <- read.csv(here("data", "data export 20240424.csv"), sep = ";")
+```
+
+```{r}
+library(dplyr)
+```
+
+## Replace "Not Available" with NA
+
+```{r}
+# Replace "Not Available" with NA in specified columns
+energy_data <- data %>%
+  mutate(
+    Solar.Energy.Production...Quadrillion.Btu. = na_if(Solar.Energy.Production...Quadrillion.Btu., "Not Available"),
+    Wind.Energy.Production...Quadrillion.Btu. = na_if(Wind.Energy.Production...Quadrillion.Btu., "Not Available")
+  )
+
+# Check the structure to ensure changes are applied
+str(energy_data)
+```
+
+## 

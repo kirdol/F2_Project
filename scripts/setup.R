@@ -8,7 +8,8 @@ packages_loaded <- c(
   "dplyr",
   "lubridate",
   "forecast",
-  "fable"
+  "fable",
+  "ggplot2"
 )
 
 # Function that install the packages if not already installed on your computer
@@ -22,3 +23,4 @@ for (pkg in packages_loaded) {
 
 # cleaning of the environment
 rm(pkg)
+

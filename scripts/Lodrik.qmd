@@ -1,6 +1,6 @@
 ```{r}
 source(here::here("scripts", "setup.R"))
-# data <- read.csv(here("data", "data export 20240424.csv"), sep = ";")
+data <- read.csv(here("data", "data_export_20240424.csv"), sep = ";")
 # summary(data)
 ```
 
@@ -13,15 +13,9 @@ library(fable)
 library(stringr)  # Ensure this library is loaded
 
 # Load the data
-data <- read.csv(here("data", "data export 20240424.csv"),
+data <- read.csv(here("data", "data_export_20240424.csv"),
                  sep = ";",  # Specify the separator as semicolon
                  stringsAsFactors = FALSE)
-
-# Replace periods with underscores in column names
-names(data) <- gsub("\\.", "_", names(data))
-
-# Check the updated column names
-print(names(data))
 
 # Preprocessing
 data <- data %>%

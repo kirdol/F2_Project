@@ -1,0 +1,122 @@
+---
+title: "Jeff"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+data <- read.csv(here("data", "data_export_20240424.csv"), sep = ";")
+```
+
+## Replace "Not Available" with NA
+
+```{r}
+# Replace "Not Available" with NA in specified columns
+energy_data <- data %>%
+  mutate(
+    Solar_Energy_Production = na_if(Solar_Energy_Production, "Not Available"),
+    Wind_Energy_Production = na_if(Wind_Energy_Production, "Not Available")
+  )
+
+# Check the structure to ensure changes are applied
+str(energy_data)
+```
+
+## Convert Month into Date
+
+```{r}
+energy_data$Month <- as.Date(energy_data$Month, format = "%d.%m.%y")
+```
+
+## Plot Data
+
+```{r}
+# Coal Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Coal_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+summary(energy_data$Coal_Production)
+
+# Natural Gas Dry Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Natural_Gas_Dry_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Crude Oil Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Crude_Oil_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Natural Gas Plant Liquids Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Natural_Gas_Plant_Liquids_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Total Fossil Fuels Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Total_Fossil_Fuels_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+#Nuclear Electric Power Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Nuclear_Electric_Power_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Hydroelectric Power Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Hydroelectric_Power_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Geothermal Energy Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Geothermal_Energy_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Solar Energy Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Solar_Energy_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Wind Energy Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Wind_Energy_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Biomass Energy Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Biomass_Energy_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Total Renewable Energy Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Total_Renewable_Energy_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Total Primary Energy Production
+library(ggplot2)
+ggplot(energy_data, aes(x = Month, y = Total_Primary_Energy_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+```
+
+## Check for Stationarity
+
+```{r}
+
+```
+

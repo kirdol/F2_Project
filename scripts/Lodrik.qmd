@@ -1,0 +1,124 @@
+## Project 2
+
+## Initial Setup
+
+```{r setup, message=FALSE}
+source(here::here("scripts", "setup.R"))
+data <- read.csv(here("data", "data_export_20240424.csv"), sep = ";")
+data <- data %>%
+  mutate_all(~ ifelse(. == "Not Available", 0, .))
+```
+
+## Date format
+```{r Date format}
+# Convert the 'Month' column to a date type
+data$Month <- as.Date(data$Month, format = "%d.%m.%y")
+
+# Convert the data frame to a tsibble
+data_tsibble <- as_tsibble(data, index = Month)
+```
+
+## ARIMA Model for Coal Production
+```{r ARIMA Model}
+# Extract the time series for Coal production
+coal_ts <- as.ts(data_tsibble$Coal_Production)
+
+# Fit an ARIMA model
+arima_model <- auto.arima(coal_ts)
+
+# Forecast using the ARIMA model
+forecast_result <- forecast(arima_model, h = 24)
+
+# Plot the forecast
+autoplot(forecast_result) +
+  labs(title = "ARIMA Forecast of Coal Production",
+       y = "Coal Production",
+       x = "Time")
+
+arima_model
+```
+
+## Random Forest Model for Coal Production (Does not work yet)
+```{r Random Forest, eval=FALSE}
+library(randomForest)
+# Prepare the data for random forest
+# Create lagged features
+lag_data <- slide(data_tsibble, .before = 1) %>%
+  mutate(future_production = lead(Coal_production)) %>%
+  drop_na()
+
+# Create lagged features
+lag_data <- data_tsibble %>%
+  mutate(Coal_production_lag1 = lag(Coal_production, 1)) %>%
+  mutate(Coal_production_lag2 = lag(Coal_production, 2)) %>%
+  mutate(Coal_production_lag3 = lag(Coal_production, 3)) %>%
+  drop_na()
+
+# Prepare data for modeling
+train_data <- head(lag_data, -24)  # Training data
+test_data <- tail(lag_data, 24)    # Testing data for the next 2 years
+
+# Train the random forest model
+rf_model <- randomForest(Coal_production ~ ., data = train_data)
+
+# Make predictions
+predictions <- predict(rf_model, newdata = test_data)
+
+# Plot the forecast
+autoplot(data_tsibble) +
+  autolayer(as_tsibble(test_data$Coal_production, index = test_data$Month), series = "Actual") +
+  autolayer(as_tsibble(predictions, index = test_data$Month), series = "Forecast") +
+  labs(title = "Random Forest Forecast of Coal Production",
+       y = "Coal Production",
+       x = "Time")
+```
+
+## Neural network model for Coal Production (Does not work yet)
+```{r Neural Network, eval=FALSE}
+library(nnet)
+fit <- nnetar(data_tsibble, lambda=0)
+autoplot(forecast(fit,h=30))
+```
+
+## ETS Model for Coal Production (Does not work yet)
+```{r ETS Model, eval=FALSE}
+# Fill implicit gaps in time
+data_tsibble_filled <- data_tsibble %>%
+  fill_gaps()
+
+# Fit ETS model
+fit <- data_tsibble_filled %>%
+  model(ETS(Coal_Production))
+
+# Forecast
+forecast_values <- fit %>%
+  forecast(h = 12)
+
+# Plot forecast
+autoplot(forecast_values)
+```
+
+## Test (Does not work yet)
+
+```{r TEST, eval=FALSE}
+summary(data_tsibble)
+ggplot(data_tsibble, aes(x = Month)) +
+  geom_line(aes(y = Coal_Production), color = "blue") +
+  geom_line(aes(y = Natural_Gas_Dry_Production), color = "red") +
+  geom_line(aes(y = Crude_Oil_Production), color = "green") +
+  geom_line(aes(y = Natural_Gas_Plant_Liquids_Production), color = "orange") +
+  geom_line(aes(y = Total_Fossil_Fuels_Production), color = "purple") +
+  geom_line(aes(y = Nuclear_Electric_Power_Production), color = "black") +
+  geom_line(aes(y = Hydroelectric_Power_Production), color = "brown") +
+  geom_line(aes(y = Geothermal_Energy_Production), color = "pink") +
+  geom_line(aes(y = Solar_Energy_Production), color = "yellow") +
+  geom_line(aes(y = Wind_Energy_Production), color = "grey") +
+  geom_line(aes(y = Biomass_Energy_Production), color = "cyan") +
+  geom_line(aes(y = Total_Renewable_Energy_Production), color = "magenta") +
+  geom_line(aes(y = Total_Primary_Energy_Production), color = "violet") +
+  labs(title = "All Variables Over Time",
+       x = "Time",
+       y = "Value") +
+  theme_minimal()
+```
+

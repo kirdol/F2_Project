@@ -9,7 +9,11 @@ packages_loaded <- c(
   "lubridate",
   "forecast",
   "fable",
-  "ggplot2"
+  "ggplot2",
+  "flextable",
+  "readxl",
+  "patchwork",
+  "tsibbledata"
 )
 
 # Function that install the packages if not already installed on your computer

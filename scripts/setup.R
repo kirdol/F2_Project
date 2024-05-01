@@ -14,7 +14,10 @@ packages_loaded <- c(
   "readxl",
   "patchwork",
   "tsibbledata",
-  "patchwork"
+  "patchwork",
+  "broom",
+  "purrr",
+  "knitr"
 )
 
 # Function that install the packages if not already installed on your computer

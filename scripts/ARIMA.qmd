@@ -116,7 +116,51 @@ p_total_primary_energy <- autoplot(forecast_result_total_primary_energy) +
        y = "Total Primary Energy Production",
        x = "Time")
 
+final_plot <- p_coal + p_natural_gas_dry + p_crude_oil + p_natural_gas_plant_liquids +
+              p_total_fossil_fuels + p_nuclear_electric_power + p_hydroelectric_power +
+              p_geothermal_energy + p_solar_energy + p_wind_energy + p_biomass_energy +
+              p_total_renewable_energy + p_total_primary_energy +
+              plot_layout(guides = 'collect') & 
+              theme(legend.position = "bottom")
 
-
-arima_model
+# Affichage du résultat
+print(final_plot)
 ```
+
+```{r}
+models <- list(
+  Coal = auto.arima(data_tsibble$Coal_Production),
+  Natural_Gas_Dry = auto.arima(data_tsibble$Natural_Gas_Dry_Production),
+  Crude_Oil = auto.arima(data_tsibble$Crude_Oil_Production),
+  Natural_Gas_Liquids = auto.arima(data_tsibble$Natural_Gas_Plant_Liquids_Production),
+  Total_Fossil_Fuels = auto.arima(data_tsibble$Total_Fossil_Fuels_Production),
+  Nuclear_Power = auto.arima(data_tsibble$Nuclear_Electric_Power_Production),
+  Hydroelectric_Power = auto.arima(data_tsibble$Hydroelectric_Power_Production),
+  Geothermal_Energy = auto.arima(data_tsibble$Geothermal_Energy_Production),
+  Solar_Energy = auto.arima(data_tsibble$Solar_Energy_Production),
+  Wind_Energy = auto.arima(data_tsibble$Wind_Energy_Production),
+  Biomass_Energy = auto.arima(data_tsibble$Biomass_Energy_Production),
+  Total_Renewable_Energy = auto.arima(data_tsibble$Total_Renewable_Energy_Production),
+  Total_Primary_Energy = auto.arima(data_tsibble$Total_Primary_Energy_Production)
+)
+
+# Manually extract model details
+model_details <- map(models, function(model) {
+  data.frame(
+    Model = names(model),
+    ARIMA_Order = paste(model$arma[1], model$arma[2], model$arma[3], sep=","),
+    Seasonal_Order = paste(model$arma[4], model$arma[5], model$arma[6], sep=","),
+    AIC = model$aic
+  )
+})
+
+# Combine into a single data frame
+model_details_df <- bind_rows(model_details)
+
+# View the results
+print(model_details_df)
+
+# Create a nicer table view
+kable(model_details_df)
+```
+

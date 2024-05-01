@@ -97,7 +97,7 @@ ggplot(data, aes(x = Month, y = Total_Renewable_Energy_Production)) +   geom_lin
 
 # --- coal production --- #
 
-#plot
+#plot 
 ggplot(data, aes(x = Month, y = Coal_Production)) +   geom_line() +  # Use geom_line() for a time series plot
   labs(title = "Coal Production Over Time",
        x = "Month",
@@ -111,38 +111,39 @@ coal_production_monthly.ts <- data %>%
   as_tsibble(index = Year_Month) %>%
   select(Year_Month, Coal_Production)
 
-coal_production_weekly.ts <- data %>% 
-  mutate(Year_week = yearweek(Month)) %>% 
-  as_tsibble(index = Year_week) %>% 
-  select(Year_week, Coal_Production)
-
 
 #check gaps 
 coal_production_monthly.ts.gaps <- has_gaps(coal_production_monthly.ts) #no gaps
-coal_production_weekly.ts.gaps <- has_gaps(coal_production_weekly.ts) #gaps 
-coal_production_weekly.ts.gaps <- scan_gaps(coal_production_weekly.ts)
 
 
 #check for seasonality, trend, residuals - decomposition
-decomp <- coal_production_monthly.ts %>%
-  model(decomp = classical_decomposition(coal_production_monthly.ts, type = "multiplicative")) %>%
-  components()
+coal_production_monthly.ts %>%
+  model(classical_decomposition(Coal_Production, type = "multiplicative")) %>%
+  components() %>%
+  autoplot() + xlab("Year")
 
-decomp %>% autoplot() ###### We notice trend and seasonality 
+
+# -- Mean + Naive + SNaive model -- #
+coal_mean_naive_snaive.fit <- coal_production_monthly.ts %>% model(
+  Mean = MEAN(Coal_Production),
+  Naive = NAIVE(Coal_Production),
+  S_Naive = SNAIVE(Coal_Production))
+coal_mean_naive_snaive.fit %>% forecast(h = 15) %>% autoplot(coal_production_monthly.ts, level = NULL) +
+  guides(colour=guide_legend(title = "Forecast"))
 
 
 # -- ETS model -- #
+
+#model
 coal_ets.fit <- coal_production_monthly.ts %>% 
-  model(ETS = ETS(Coal_Production ~ error("A") + trend("A") + season("A")))
-coal_ets.fit %>% forecast(h = 24) %>% autoplot(coal_production_monthly.ts)
-
-coal_ets.fit <- coal_production_weekly.ts %>% 
-  model(ETS = ETS(Coal_Production ~ error("A") + trend("A") + season("M")))
-coal_ets.fit %>% forecast(h = 5) %>% autoplot(coal_production_weekly.ts)
+  model(ETS = ETS(Coal_Production ~ error("A") + trend("A", alpha = 0.9, beta = 0.0645) + season("M"), opt_crit = "mse"))
 
 
-# -- ARIMA -- #
-coal_ARIMA.fit <- coal_production_monthly.ts %>%
-  model(arima = ARIMA(Coal_Production ~ 1 + pdq(0,2,1)))
-coal_ARIMA.fit %>% forecast(h = 5) %>% autoplot(coal_ARIMA.fit)
+#to check best alpha and beta
+coefficients(coal_ets.fit)
+
+
+#Forecast
+coal_ets.fit %>% forecast(h = 12) %>% autoplot(coal_production_monthly.ts)
+
 

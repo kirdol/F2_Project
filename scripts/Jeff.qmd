@@ -18,6 +18,18 @@ consumptiondata <- read.csv(here("data", "energyconsumption.csv"), sep = ";")
 temperature <- read.csv(here("data", "temperature.csv"), sep = ";")
 ```
 
+## Convert Month into Date for the data dataset
+
+```{r}
+data$Month <- as.Date(data$Month, format = "%d.%m.%y")
+```
+
+## Convert Month into Date for the consumptiondata dataset
+
+```{r}
+consumptiondata$Month <- as.Date(consumptiondata$Month, format = "%d.%m.%y")
+```
+
 ## Pivot Months for the temperature dataset
 
 ```{r}
@@ -27,13 +39,7 @@ temperature <- temperature %>%
   values_to = "Temperature")
 ```
 
-## Convert Month into Date
-
-```{r}
-data$Month <- as.Date(data$Month, format = "%d.%m.%y")
-```
-
-## Replace "Not Available" with NA, then 0
+## Replace "Not Available" with NA, then 0 (Production)
 
 ```{r}
 data$Solar_Energy_Production <- replace(data$Solar_Energy_Production, data$Solar_Energy_Production == "Not Available", 0)
@@ -47,7 +53,7 @@ data$Solar_Energy_Production <- as.numeric(data$Solar_Energy_Production)
 data$Wind_Energy_Production <- as.numeric(data$Wind_Energy_Production)
 ```
 
-## Plot Data
+## Plot Data Production
 
 ```{r}
 # Coal Production
@@ -127,6 +133,25 @@ ggplot(data, aes(x = Month, y = Total_Renewable_Energy_Production)) +
 # Total Primary Energy Production
 library(ggplot2)
 ggplot(data, aes(x = Month, y = Total_Primary_Energy_Production)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+```
+
+## Plot Data Consumption
+
+j'arrive pas pour l'instant, problèmes de conversion de character à numeric
+
+## Plot Temperature
+
+A refaire, ç<a ne marche pas non plus
+
+```{r}
+temperature <- temperature %>% 
+  mutate(Date = make_date(Year, Month, 1)) %>% 
+  select(-Year, -Month) %>% 
+  filter(year(Date) == 1973) #BRUH CA MARCHE PAS
+
+ggplot(temperature, aes(x = Month, y = Total_Primary_Energy_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 ```

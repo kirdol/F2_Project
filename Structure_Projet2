@@ -1,0 +1,13 @@
+- Consommation année précédente pour même mois 
+- Autres variables concernant par exemple météo, consommation 
+
+STRUCTURE
+- intro sujet/données 
+  - Exploration outliers/trend/seasonality
+    - snaive
+      - améliorations (montrer globalement tous les time series avec) --> ETS, ARIMA "voilà ce qu'on peut faire         avec de         meilleurs models".
+      - puis montrer même procédé pour les autres time series
+    
+
+
+    

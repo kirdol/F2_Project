@@ -13,7 +13,8 @@ packages_loaded <- c(
   "flextable",
   "readxl",
   "patchwork",
-  "tsibbledata"
+  "tsibbledata",
+  "patchwork"
 )
 
 # Function that install the packages if not already installed on your computer

@@ -30,7 +30,7 @@ arima_model <- auto.arima(coal_ts)
 forecast_result <- forecast(arima_model, h = 24)
 
 # Plot the forecast
-autoplot(forecast_result) +
+p_coal <- autoplot(forecast_result) +
   labs(title = "ARIMA Forecast of Coal Production",
        y = "Coal Production",
        x = "Time")
@@ -121,4 +121,6 @@ ggplot(data_tsibble, aes(x = Month)) +
        y = "Value") +
   theme_minimal()
 ```
+
+
 

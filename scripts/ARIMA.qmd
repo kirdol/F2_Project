@@ -144,23 +144,31 @@ models <- list(
   Total_Primary_Energy = auto.arima(data_tsibble$Total_Primary_Energy_Production)
 )
 
-# Manually extract model details
-model_details <- map(models, function(model) {
+# Define a function to extract model orders safely
+extract_model_orders <- function(model) {
+  # Extract the non-seasonal order
+  non_seasonal_order <- paste(model$order[1], model$order[2], model$order[3], sep=",")
+  
+  # Check and extract the seasonal order, if present
+  if ("seasonal" %in% names(model) && !is.null(model$seasonal$order)) {
+    seasonal_order <- paste(model$seasonal$order[1], model$seasonal$order[2], model$seasonal$order[3], sep=",")
+  } else {
+    seasonal_order <- "0,0,0"  # No seasonal component
+  }
+  
+  # Return a data frame row
   data.frame(
     Model = names(model),
-    ARIMA_Order = paste(model$arma[1], model$arma[2], model$arma[3], sep=","),
-    Seasonal_Order = paste(model$arma[4], model$arma[5], model$arma[6], sep=","),
-    AIC = model$aic
+    NonSeasonal_Order = non_seasonal_order,
+    Seasonal_Order = seasonal_order,
+    stringsAsFactors = FALSE
   )
-})
+}
 
-# Combine into a single data frame
-model_details_df <- bind_rows(model_details)
+# Apply the function to each model and combine results
+model_orders_df <- do.call(rbind, lapply(models, extract_model_orders))
 
-# View the results
-print(model_details_df)
-
-# Create a nicer table view
-kable(model_details_df)
+# Print the resulting data frame
+print(model_orders_df)
 ```
 

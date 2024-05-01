@@ -1,50 +1,50 @@
 library(reshape2)
 library(dplyr)
 #import data
-# data <- read.csv("/Users/stefanfavre/Documents/GitHub/F2_Project2/data/data_export_20240424.csv", sep = ";")
-# 
-# #changing date format
-# data$Month <- as.Date(data$Month, format = "%d.%m.%y")
-# 
-# 
-# #some columns have "not available" instead of NAs, replacing them by 0s 
-# data$Solar_Energy_Production <- replace(data$Solar_Energy_Production, data$Solar_Energy_Production == "Not Available", 0)
-# data$Solar_Energy_Production %>% as.numeric(data$Solar_Energy_Production)
-# typeof(data$Solar_Energy_Production)
-# 
-# data$Solar_Energy_Production <- ifelse(data$Solar_Energy_Production == "Not Available", 0, data$Solar_Energy_Production)
-# data$Wind_Energy_Production <- ifelse(data$Wind_Energy_Production == "Not Available", 0, data$Wind_Energy_Production)
-# 
-# data$Solar_Energy_Production <- as.numeric(data$Solar_Energy_Production)
-# data$Wind_Energy_Production <- as.numeric(data$Wind_Energy_Production)
+data <- read.csv("/Users/stefanfavre/Documents/GitHub/F2_Project2/data/data_export_20240424.csv", sep = ";")
 
-# run the setup.R script to load the packages
-source(here::here("scripts", "setup.R"))
-
-# Load the packages
-data <- read.csv(here("data", "data_export_20240424.csv"), sep = ";")
-
-# replace the NA with 0
-data <- data %>%
-  mutate_all(~ ifelse(. == "Not Available",0, .))
-
-# Convert the 'Month' column to a date type
+#changing date format
 data$Month <- as.Date(data$Month, format = "%d.%m.%y")
 
-# Check for non-numeric columns
-non_numeric_cols <- sapply(data, function(x) !is.numeric(x))
-names(data)[non_numeric_cols]
 
-# Transform the non-numeric columns to numeric
-data <- data %>%
-  mutate_all(as.numeric)
+#some columns have "not available" instead of NAs, replacing them by 0s
+data$Solar_Energy_Production <- replace(data$Solar_Energy_Production, data$Solar_Energy_Production == "Not Available", 0)
+data$Solar_Energy_Production %>% as.numeric(data$Solar_Energy_Production)
+typeof(data$Solar_Energy_Production)
 
-# Convert the data frame to a tsibble
-data_tsibble <- as_tsibble(data, index = Month)
+data$Solar_Energy_Production <- ifelse(data$Solar_Energy_Production == "Not Available", 0, data$Solar_Energy_Production)
+data$Wind_Energy_Production <- ifelse(data$Wind_Energy_Production == "Not Available", 0, data$Wind_Energy_Production)
 
-# Check the class of the data
-sapply(data, class)
-# We have only "numeric" class
+data$Solar_Energy_Production <- as.numeric(data$Solar_Energy_Production)
+data$Wind_Energy_Production <- as.numeric(data$Wind_Energy_Production)
+
+# # run the setup.R script to load the packages
+# source(here::here("scripts", "setup.R"))
+# 
+# # Load the packages
+# data <- read.csv(here("data", "data_export_20240424.csv"), sep = ";")
+# 
+# # replace the NA with 0
+# data <- data %>%
+#   mutate_all(~ ifelse(. == "Not Available",0, .))
+# 
+# # Convert the 'Month' column to a date type
+# data$Month <- as.Date(data$Month, format = "%d.%m.%y")
+# 
+# # Check for non-numeric columns
+# non_numeric_cols <- sapply(data, function(x) !is.numeric(x))
+# names(data)[non_numeric_cols]
+# 
+# # Transform the non-numeric columns to numeric
+# data <- data %>%
+#   mutate_all(as.numeric)
+# 
+# # Convert the data frame to a tsibble
+# data_tsibble <- as_tsibble(data, index = Month)
+# 
+# # Check the class of the data
+# sapply(data, class)
+# # We have only "numeric" class
 
 # Evolution through time variables 
 ggplot(data, aes(x = Month, y = Coal_Production)) +   geom_line() +  # Use geom_line() for a time series plot
@@ -199,18 +199,24 @@ coefficients(coal_ets.fit2)
 
 
 #general tsibble
+library(lubridate)
 data_tsibble <- data %>% 
   mutate(Year_Month = yearmonth(Month)) %>%
   as_tsibble(index = Year_Month) %>%
-  select(-c(Month))
-
+  select(-c(Month)) %>%
+  select(Year_Month, everything())
 
 
 # Fit ETS models for all the type of production
-ets_model_coal <- data_tsibble %>% model(ETS(data_tsibble$Coal_Production))
 
+#coal_production 
+ets_model_coal <- data_tsibble %>% model(ETS = ETS(Coal_Production))
+ets_model_coal %>% forecast(h = 24) %>% autoplot(data_tsibble)
 
-arima_model_natural_gas_dry <- data_tsibble %>% model(ETS = ETS(Natural_Gas_Dry_Production))
+#natural gas production 
+ets_model_natural_gas_dry <- data_tsibble %>% model(ETS = ETS(Natural_Gas_Dry_Production))
+ets_model_natural_gas_dry %>% forecast(h = 24) %>% autoplot(data_tsibble)
+
 
 
 arima_model_crude_oil <- auto.arima(data_tsibble$Crude_Oil_Production)
@@ -226,9 +232,8 @@ arima_model_total_renewable_energy <- auto.arima(data_tsibble$Total_Renewable_En
 arima_model_total_primary_energy <- auto.arima(data_tsibble$Total_Primary_Energy_Production)
 
 # Forecast using the ETS model
-forecast_result_natural_gas_dry <- forecast(arima_model_natural_gas_dry, h = 24)
-forecast_result_crude_oil <- forecast(arima_model_crude_oil, h = 24)
-forecast_result_natural_gas_plant_liquids <- forecast(arima_model_natural_gas_plant_liquids, h = 24)
+forecast_result_crude_oil <- forecast(ets_model_crude_oil, h = 24)
+forecast_result_natural_gas_plant_liquids <- forecast(ets_model_natural_gas_plant_liquids, h = 24)
 forecast_result_total_fossil_fuels <- forecast(arima_model_total_fossil_fuels, h = 24)
 forecast_result_nuclear_electric_power <- forecast(arima_model_nuclear_electric_power, h = 24)
 forecast_result_hydroelectric_power <- forecast(arima_model_hydroelectric_power, h = 24)
@@ -244,8 +249,10 @@ p_coal <- autoplot(forecast_result_coal) +
   labs(title = "ARIMA Forecast of Coal Production",
        y = "Coal Production",
        x = "Time")
-p_natural_gas_dry <- autoplot(forecast_result_natural_gas_dry) +
-  labs(title = "ARIMA Forecast of Natural Gas Dry Production",
+# p_natural_gas_dry <- 
+  
+autoplot(forecast_result_natural_gas_dry) +
+  labs(title = "ETS Forecast of Natural Gas Dry Production",
        y = "Natural Gas Dry Production",
        x = "Time")
 p_crude_oil <- autoplot(forecast_result_crude_oil) +
@@ -293,15 +300,15 @@ p_total_primary_energy <- autoplot(forecast_result_total_primary_energy) +
        y = "Total Primary Energy Production",
        x = "Time")
 
-final_plot <- p_coal + p_natural_gas_dry + p_crude_oil + p_natural_gas_plant_liquids +
-  p_total_fossil_fuels + p_nuclear_electric_power + p_hydroelectric_power +
-  p_geothermal_energy + p_solar_energy + p_wind_energy + p_biomass_energy +
-  p_total_renewable_energy + p_total_primary_energy +
-  plot_layout(guides = 'collect') & 
-  theme(legend.position = "bottom")
-
-# Affichage du résultat
-print(final_plot)
+# final_plot <- p_coal + p_natural_gas_dry + p_crude_oil + p_natural_gas_plant_liquids +
+#   p_total_fossil_fuels + p_nuclear_electric_power + p_hydroelectric_power +
+#   p_geothermal_energy + p_solar_energy + p_wind_energy + p_biomass_energy +
+#   p_total_renewable_energy + p_total_primary_energy +
+#   plot_layout(guides = 'collect') & 
+#   theme(legend.position = "bottom")
+# 
+# # Affichage du résultat
+# print(final_plot)
 
 
 

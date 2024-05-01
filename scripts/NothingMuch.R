@@ -15,6 +15,8 @@ typeof(data$Solar_Energy_Production)
 data$Solar_Energy_Production <- ifelse(data$Solar_Energy_Production == "Not Available", 0, data$Solar_Energy_Production)
 data$Wind_Energy_Production <- ifelse(data$Wind_Energy_Production == "Not Available", 0, data$Wind_Energy_Production)
 
+data$Solar_Energy_Production <- as.numeric(data$Solar_Energy_Production)
+data$Wind_Energy_Production <- as.numeric(data$Wind_Energy_Production)
 
 # Evolution through time variables 
 ggplot(data, aes(x = Month, y = Coal_Production)) +   geom_line() +  # Use geom_line() for a time series plot
@@ -132,7 +134,7 @@ decomp %>% autoplot() ###### We notice trend and seasonality
 # -- ETS model -- #
 coal_ets.fit <- coal_production_monthly.ts %>% 
   model(ETS = ETS(Coal_Production ~ error("A") + trend("A") + season("A")))
-coal_ets.fit %>% forecast(h = 5) %>% autoplot(coal_production_monthly.ts)
+coal_ets.fit %>% forecast(h = 24) %>% autoplot(coal_production_monthly.ts)
 
 coal_ets.fit <- coal_production_weekly.ts %>% 
   model(ETS = ETS(Coal_Production ~ error("A") + trend("A") + season("M")))

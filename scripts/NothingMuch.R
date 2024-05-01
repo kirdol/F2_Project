@@ -134,16 +134,43 @@ coal_mean_naive_snaive.fit %>% forecast(h = 15) %>% autoplot(coal_production_mon
 
 # -- ETS model -- #
 
-#model
+#model when trying to tune hyperparameters
+coal_ets_tuned <- coal_production_monthly.ts %>% 
+  model(ETS_tuned = ETS(Coal_Production ~ error("A") + trend("A", alpha = 0.9, beta = 0.0645) + season("M"), opt_crit = "mse"))
+
+
+#Forecast
+coal_ets_tuned %>% forecast(h = 12) %>% autoplot(coal_production_monthly.ts)
+
+
+#model when letting the function tune hyperparameters
 coal_ets.fit <- coal_production_monthly.ts %>% 
-  model(ETS = ETS(Coal_Production ~ error("A") + trend("A", alpha = 0.9, beta = 0.0645) + season("M"), opt_crit = "mse"))
-
-
-#to check best alpha and beta
-coefficients(coal_ets.fit)
+  model(ETS = ETS(Coal_Production))
 
 
 #Forecast
 coal_ets.fit %>% forecast(h = 12) %>% autoplot(coal_production_monthly.ts)
+
+
+#to check best alpha and beta
+coefficients(coal_ets.fit)
+coefficients(coal_ets.fit2)
+
+
+##############################
+# when using the ETS() function without explicitly specifying 
+# how to model the trend, seasonality, and error type, the software will 
+# generally employ an automatic model selection process based on some 
+# criteria (like AIC or BIC) to choose the best fit among the available
+# types (additive or multiplicative) for each component. 
+
+# Source: ChatGPT
+##############################
+
+#same for the remaining time series
+
+
+
+
 
 

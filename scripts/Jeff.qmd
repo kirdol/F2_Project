@@ -10,6 +10,23 @@ editor_options:
 data <- read.csv(here("data", "data_export_20240424.csv"), sep = ";")
 ```
 
+```{r}
+consumptiondata <- read.csv(here("data", "energyconsumption.csv"), sep = ";")
+```
+
+```{r}
+temperature <- read.csv(here("data", "temperature.csv"), sep = ";")
+```
+
+## Pivot Months for the temperature dataset
+
+```{r}
+temperature <- temperature %>% 
+  pivot_longer(c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'),
+  names_to = "Month",
+  values_to = "Temperature")
+```
+
 ## Convert Month into Date
 
 ```{r}
@@ -113,6 +130,4 @@ ggplot(data, aes(x = Month, y = Total_Primary_Energy_Production)) +
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 ```
-
-
 

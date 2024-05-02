@@ -233,6 +233,63 @@ ggplot(consumptiondata, aes(x = Month, y = Total_Primary_Energy_Consumption)) +
 # Temperature over the years
 ggplot(temperature, aes(x = Date, y = Temperature)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Temperature")
+  labs(title = "Temperature Time Series", x = "Date", y = "Temperature")
+```
+
+## All plots together (Production)
+
+```{r}
+ggplot(data, aes(x = Month)) + 
+  geom_line(aes(y = Coal_Production, color = "Coal Production")) +
+  geom_line(aes(y = Natural_Gas_Dry_Production, color = "Natural Gas Dry Production")) +
+  geom_line(aes(y = Crude_Oil_Production, color = "Crude Oil Production")) +
+  geom_line(aes(y = Natural_Gas_Plant_Liquids_Production, color = "Natural Gas Plant Liquids Production")) +
+  geom_line(aes(y = Total_Fossil_Fuels_Production, color = "Total Fossil Fuels Production")) +
+  geom_line(aes(y = Nuclear_Electric_Power_Production, color = "Nuclear Electric Power Production")) +
+  geom_line(aes(y = Hydroelectric_Power_Production, color = "Hydroelectric Power Production")) +
+  geom_line(aes(y = Geothermal_Energy_Production, color = "Geothermal Energy Production")) +
+  geom_line(aes(y = Solar_Energy_Production, color = "Solar Energy Production")) +
+  geom_line(aes(y = Wind_Energy_Production, color = "Wind Energy Production")) +
+  geom_line(aes(y = Biomass_Energy_Production, color = "Biomass Energy Production")) +
+  geom_line(aes(y = Total_Renewable_Energy_Production, color = "Total Renewable Energy Production")) +
+  geom_line(aes(y = Total_Primary_Energy_Production, color = "Total Primary Energy Production")) +
+  labs(title = "Energy Productions Time Series", x = "Date", y = "Production Value") +
+  scale_color_manual(values = c("Coal Production" = "black", "Natural Gas Dry Production" = "red", 
+                                "Crude Oil Production" = "blue", "Natural Gas Plant Liquids Production" = "green", 
+                                "Total Fossil Fuels Production" = "orange", "Nuclear Electric Power Production" = "purple",
+                                "Hydroelectric Power Production" = "brown", "Geothermal Energy Production" = "pink",
+                                "Solar Energy Production" = "yellow", "Wind Energy Production" = "grey",
+                                "Biomass Energy Production" = "cyan", "Total Renewable Energy Production" = "magenta",
+                                "Total Primary Energy Production" = "beige")) +
+  theme_minimal() +
+  theme(legend.title = element_blank(), legend.position = "bottom")
+```
+
+## All plots together (Consumption)
+
+```{r}
+ggplot(consumptiondata, aes(x = Month)) + 
+  geom_line(aes(y = Coal_Consumption, color = "Coal Consumption")) +
+  geom_line(aes(y = Natural_Gas_Consumption, color = "Natural Gas Consumption")) +
+  geom_line(aes(y = Petroleum_Consumption, color = "Petroleum Consumption")) +
+  geom_line(aes(y = Total_Fossil_Fuels_Consumption, color = "Total Fossil Fuels Consumption")) +
+  geom_line(aes(y = Nuclear_Electric_Power_Consumption, color = "Nuclear Electric Power Consumption")) +
+  geom_line(aes(y = Hydroelectric_Power_Consumption, color = "Hydroelectric Power Consumption")) +
+  geom_line(aes(y = Geothermal_Energy_Consumption, color = "Geothermal Energy Consumption")) +
+  geom_line(aes(y = Solar_Energy_Consumption, color = "Solar Energy Consumption")) +
+  geom_line(aes(y = Wind_Energy_Consumption, color = "Wind Energy Consumption")) +
+  geom_line(aes(y = Biomass_Energy_Consumption, color = "Biomass Energy Consumption")) +
+  geom_line(aes(y = Total_Renewable_Energy_Consumption, color = "Total Renewable Energy Consumption")) +
+  geom_line(aes(y = Total_Primary_Energy_Consumption, color = "Total Primary Energy Consumption")) +
+  labs(title = "Energy Consumptions Time Series", x = "Date", y = "Consumption Value") +
+  scale_color_manual(values = c("Coal Consumption" = "black", "Natural Gas Consumption" = "red", 
+                                "Petroleum Consumption" = "blue", "Total Fossil Fuels Consumption" = "green", 
+                                "Nuclear Electric Power Consumption" = "purple",
+                                "Hydroelectric Power Consumption" = "brown", "Geothermal Energy Consumption" = "pink",
+                                "Solar Energy Consumption" = "yellow", "Wind Energy Consumption" = "grey",
+                                "Biomass Energy Consumption" = "cyan", "Total Renewable Energy Consumption" = "magenta",
+                                "Total Primary Energy Consumption" = "beige")) +
+  theme_minimal() +
+  theme(legend.title = element_blank(), legend.position = "bottom")
 ```
 

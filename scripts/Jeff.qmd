@@ -39,7 +39,7 @@ temperature <- temperature %>%
   values_to = "Temperature")
 ```
 
-## Replace "Not Available" with NA, then 0 (Production)
+## Replace "Not Available" with 0 (Production)
 
 ```{r}
 data$Solar_Energy_Production <- replace(data$Solar_Energy_Production, data$Solar_Energy_Production == "Not Available", 0)
@@ -53,85 +53,111 @@ data$Solar_Energy_Production <- as.numeric(data$Solar_Energy_Production)
 data$Wind_Energy_Production <- as.numeric(data$Wind_Energy_Production)
 ```
 
+## Replace "Not Available" into 0 (Consumption)
+```{r}
+
+consumptiondata$Solar_Energy_Consumption <- replace(consumptiondata$Solar_Energy_Consumption, consumptiondata$Solar_Energy_Consumption == "Not Available", 0)
+consumptiondata$Solar_Energy_Consumption <- as.numeric(consumptiondata$Solar_Energy_Consumption)
+typeof(consumptiondata$Solar_Energy_Consumption)
+
+
+consumptiondata$Solar_Energy_Consumption <- ifelse(consumptiondata$Solar_Energy_Consumption == "Not Available", 0, consumptiondata$Solar_Energy_Consumption)
+consumptiondata$Wind_Energy_Consumption <- ifelse(consumptiondata$Wind_Energy_Consumption == "Not Available", 0, consumptiondata$Wind_Energy_Consumption)
+
+
+consumptiondata$Solar_Energy_Consumption <- as.numeric(consumptiondata$Solar_Energy_Consumption)
+consumptiondata$Wind_Energy_Consumption <- as.numeric(consumptiondata$Wind_Energy_Consumption)
+```
+
+## Switch from character to numeric (Consumption)
+```{r}
+consumptiondata <- consumptiondata %>%
+  mutate(across(where(is.character), ~ as.numeric(gsub(",", ".", ., fixed = TRUE)))) %>%  
+  filter(year(Month) != 2024)
+```
+
+## Switch from character to numeric (Temperature)
+
+```{r}
+month_map <- setNames(1:12, c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+temperature <- temperature %>%
+  mutate(
+    Month = month_map[Month],
+    Temperature = as.numeric(gsub(",", ".", Temperature)) 
+  )
+
+sum(is.na(temperature$Month))
+
+temperature <- temperature %>%
+  mutate(Date = make_date(Year, Month, 1)) %>%  # Create Date assuming the 1st day of the month
+  filter(Year >= 1973, Year != 2024) %>% 
+  select(-Year, -Month)
+```
+
 ## Plot Data Production
 
 ```{r}
 # Coal Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Coal_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
-summary(data$Coal_Production)
-
 # Natural Gas Dry Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Natural_Gas_Dry_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
 # Crude Oil Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Crude_Oil_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
 # Natural Gas Plant Liquids Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Natural_Gas_Plant_Liquids_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
 # Total Fossil Fuels Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Total_Fossil_Fuels_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
 #Nuclear Electric Power Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Nuclear_Electric_Power_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
 # Hydroelectric Power Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Hydroelectric_Power_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
 # Geothermal Energy Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Geothermal_Energy_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
 # Solar Energy Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Solar_Energy_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
 # Wind Energy Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Wind_Energy_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
 # Biomass Energy Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Biomass_Energy_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
 # Total Renewable Energy Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Total_Renewable_Energy_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
 # Total Primary Energy Production
-library(ggplot2)
 ggplot(data, aes(x = Month, y = Total_Primary_Energy_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
@@ -139,20 +165,74 @@ ggplot(data, aes(x = Month, y = Total_Primary_Energy_Production)) +
 
 ## Plot Data Consumption
 
-j'arrive pas pour l'instant, problèmes de conversion de character à numeric
+```{r}
+# Coal Consumption
+ggplot(consumptiondata, aes(x = Month, y = Coal_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Natural Gas Consumption
+ggplot(consumptiondata, aes(x = Month, y = Natural_Gas_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Petroleum Consumption
+ggplot(consumptiondata, aes(x = Month, y = Petroleum_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Total Fossil Fuels Consumption
+ggplot(consumptiondata, aes(x = Month, y = Total_Fossil_Fuels_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Nuclear Electric Power Consumption
+ggplot(consumptiondata, aes(x = Month, y = Nuclear_Electric_Power_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Hydroelectric Power Consumption
+ggplot(consumptiondata, aes(x = Month, y = Hydroelectric_Power_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Geothermal Energy Consumption
+ggplot(consumptiondata, aes(x = Month, y = Geothermal_Energy_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Solar Energy Consumption
+ggplot(consumptiondata, aes(x = Month, y = Solar_Energy_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Wind Energy Consumption
+ggplot(consumptiondata, aes(x = Month, y = Wind_Energy_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Biomass Energy Consumption
+ggplot(consumptiondata, aes(x = Month, y = Biomass_Energy_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Total Renewable Energy Consumption
+ggplot(consumptiondata, aes(x = Month, y = Total_Renewable_Energy_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+
+# Total Primary Energy Consumption
+ggplot(consumptiondata, aes(x = Month, y = Total_Primary_Energy_Consumption)) + 
+  geom_line() + 
+  labs(title = "Time Series Plot", x = "Date", y = "Value")
+```
 
 ## Plot Temperature
 
-A refaire, ç<a ne marche pas non plus
-
 ```{r}
-temperature <- temperature %>% 
-  mutate(Date = make_date(Year, Month, 1)) %>% 
-  select(-Year, -Month) %>% 
-  filter(year(Date) == 1973) #BRUH CA MARCHE PAS
-
-ggplot(temperature, aes(x = Month, y = Total_Primary_Energy_Production)) + 
+# Temperature over the years
+ggplot(temperature, aes(x = Date, y = Temperature)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Time Series Plot", x = "Date", y = "Temperature")
 ```
 

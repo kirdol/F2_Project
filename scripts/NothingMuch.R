@@ -213,36 +213,54 @@ data_tsibble <- data %>%
 ets_model_coal <- data_tsibble %>% model(ETS = ETS(Coal_Production))
 ets_model_coal %>% forecast(h = 24) %>% autoplot(data_tsibble)
 
-#natural gas production 
+#natural gas dry production 
 ets_model_natural_gas_dry <- data_tsibble %>% model(ETS = ETS(Natural_Gas_Dry_Production))
 ets_model_natural_gas_dry %>% forecast(h = 24) %>% autoplot(data_tsibble)
 
+#crude oil production 
+ets_model_crude_oil <- data_tsibble %>% model(ETS = ETS(Crude_Oil_Production))
+ets_model_crude_oil %>% forecast(h = 24) %>% autoplot(data_tsibble)
 
+#natural gas plant liquids production
+ets_model_natural_gas_plant_liquids <- data_tsibble %>% model(ETS = ETS(Natural_Gas_Plant_Liquids_Production))
+ets_model_natural_gas_plant_liquids %>% forecast(h = 24) %>% autoplot(data_tsibble)
 
-arima_model_crude_oil <- auto.arima(data_tsibble$Crude_Oil_Production)
-arima_model_natural_gas_plant_liquids <- auto.arima(data_tsibble$Natural_Gas_Plant_Liquids_Production)
-arima_model_total_fossil_fuels <- auto.arima(data_tsibble$Total_Fossil_Fuels_Production)
-arima_model_nuclear_electric_power <- auto.arima(data_tsibble$Nuclear_Electric_Power_Production)
-arima_model_hydroelectric_power <- auto.arima(data_tsibble$Hydroelectric_Power_Production)
+#Total_Fossil_Fuels_Production
+ets_model_total_fossil_fuels <- data_tsibble %>% model(ETS = ETS(Total_Fossil_Fuels_Production))
+ets_model_total_fossil_fuels %>% forecast(h = 24) %>% autoplot(data_tsibble)
+
+#Nuclear_Electric_Power_Production
+ets_model_nuclear_electric_power <- data_tsibble %>% model(ETS = ETS(Nuclear_Electric_Power_Production))
+ets_model_nuclear_electric_power %>% forecast(h = 24) %>% autoplot(data_tsibble)
+
+#Hydroelectric_Power_Production
+ets_model_hydroelectric_power <- data_tsibble %>% model(ETS = ETS(Hydroelectric_Power_Production))
+ets_model_hydroelectric_power %>% forecast(h = 24) %>% autoplot(data_tsibble)
+
+#Geothermal_Energy_Production
 arima_model_geothermal_energy <- auto.arima(data_tsibble$Geothermal_Energy_Production)
-arima_model_solar_energy <- auto.arima(data_tsibble$Solar_Energy_Production)
-arima_model_wind_energy <- auto.arima(data_tsibble$Wind_Energy_Production)
-arima_model_biomass_energy <- auto.arima(data_tsibble$Biomass_Energy_Production)
-arima_model_total_renewable_energy <- auto.arima(data_tsibble$Total_Renewable_Energy_Production)
-arima_model_total_primary_energy <- auto.arima(data_tsibble$Total_Primary_Energy_Production)
-
-# Forecast using the ETS model
-forecast_result_crude_oil <- forecast(ets_model_crude_oil, h = 24)
-forecast_result_natural_gas_plant_liquids <- forecast(ets_model_natural_gas_plant_liquids, h = 24)
-forecast_result_total_fossil_fuels <- forecast(arima_model_total_fossil_fuels, h = 24)
-forecast_result_nuclear_electric_power <- forecast(arima_model_nuclear_electric_power, h = 24)
-forecast_result_hydroelectric_power <- forecast(arima_model_hydroelectric_power, h = 24)
 forecast_result_geothermal_energy <- forecast(arima_model_geothermal_energy, h = 24)
+
+#Solar_Energy_Production
+arima_model_solar_energy <- auto.arima(data_tsibble$Solar_Energy_Production)
 forecast_result_solar_energy <- forecast(arima_model_solar_energy, h = 24)
+
+#Wind_Energy_Production
+arima_model_wind_energy <- auto.arima(data_tsibble$Wind_Energy_Production)
 forecast_result_wind_energy <- forecast(arima_model_wind_energy, h = 24)
+
+#Biomass_Energy_Production
+arima_model_biomass_energy <- auto.arima(data_tsibble$Biomass_Energy_Production)
 forecast_result_biomass_energy <- forecast(arima_model_biomass_energy, h = 24)
+
+#Total_Renewable_Energy_Production
+arima_model_total_renewable_energy <- auto.arima(data_tsibble$Total_Renewable_Energy_Production)
 forecast_result_total_renewable_energy <- forecast(arima_model_total_renewable_energy, h = 24)
+
+#Total_Primary_Energy_Production
+arima_model_total_primary_energy <- auto.arima(data_tsibble$Total_Primary_Energy_Production)
 forecast_result_total_primary_energy <- forecast(arima_model_total_primary_energy, h = 24)
+
 
 # Plot the forecast
 p_coal <- autoplot(forecast_result_coal) +

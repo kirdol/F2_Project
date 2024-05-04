@@ -293,3 +293,24 @@ ggplot(consumptiondata, aes(x = Month)) +
   theme(legend.title = element_blank(), legend.position = "bottom")
 ```
 
+## Forecast - Coal Consumption
+
+```{r}
+# Tsibble
+coal_consumption_monthly.ts <- consumptiondata %>% 
+  mutate(Year_Month = yearmonth(Month)) %>%
+  as_tsibble(index = Year_Month) %>%
+  select(Year_Month, Coal_Consumption)
+
+# Gaps
+coal_consumption_monthly.ts <- has_gaps(coal_consumption_monthly.ts) #no gaps
+
+# STL Decomposition
+coal_consumption_monthly.ts %>%
+  model(classical_decomposition(Coal_Consumption, type = "multiplicative")) %>%
+  components() %>%
+  autoplot() + xlab("Year")
+```
+
+Comparing the STL decomposition of the Coal Production & The Coal Consumption, we clearly observe that the overall curves are similar, both presenting similar trends and seasonality. There seems to be a higher variation in the randomness beginning in the 2010s, but more visible in the 2020s, notably due to Covid-19. This events shows that Covid impacted the American's energy consumption, mainly as they were at home.
+

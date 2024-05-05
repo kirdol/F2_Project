@@ -214,6 +214,13 @@ data_SE_filtered <- data_tsibble %>%
   select(Year_Month, Solar_Energy_Production) %>%
   filter(year(Year_Month) >= 2011)
 
+ggplot(data_SE_filtered, aes(x = Year_Month, y = Solar_Energy_Production)) +   geom_line() +  # Use geom_line() for a time series plot
+  labs(title = "Wind_Energy_Production Over Time Filtered",
+       x = "Month",
+       y = "Units") +
+  theme_minimal()
+
+
 ets_model_solar_energy <- data_SE_filtered %>% model(ETS = ETS(Solar_Energy_Production))
 ets_model_solar_energy <- ets_model_solar_energy %>% forecast(h = 24) %>% autoplot(data_SE_filtered)
 

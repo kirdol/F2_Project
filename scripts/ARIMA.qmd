@@ -1,9 +1,7 @@
 
 ```{r setup, message=FALSE}
-# run the setup.R script to load the packages
+# Load the data and the packages
 source(here::here("scripts", "setup.R"))
-
-# Load the packages
 data <- read.csv(here("data", "data_export_20240424.csv"), sep = ";")
 
 # replace the NA with 0
@@ -21,101 +19,131 @@ names(data)[non_numeric_cols]
 data <- data %>%
   mutate_all(as.numeric)
 
+data$Month <- as.Date(data$Month, format = "%d.%m.%y")
+
 # Convert the data frame to a tsibble
 data_tsibble <- as_tsibble(data, index = Month)
 
 # Check the class of the data
-sapply(data, class)
-# We have only "numeric" class
+sapply(data_tsibble, class)
+# We have only "numeric" class OK
+
+# Forecast period
+period <- 24
 ```
 
 ## ARIMA Model
-```{r ARIMA Model}
+```{r ARIMA Model and plots}
 # Fit ARIMA models for all the type of production
-arima_model_coal <- auto.arima(data_tsibble$Coal_Production)
-arima_model_natural_gas_dry <- auto.arima(data_tsibble$Natural_Gas_Dry_Production)
-arima_model_crude_oil <- auto.arima(data_tsibble$Crude_Oil_Production)
+arima_model_coal                      <- auto.arima(data_tsibble$Coal_Production)
+arima_model_natural_gas_dry           <- auto.arima(data_tsibble$Natural_Gas_Dry_Production)
+arima_model_crude_oil                 <- auto.arima(data_tsibble$Crude_Oil_Production)
 arima_model_natural_gas_plant_liquids <- auto.arima(data_tsibble$Natural_Gas_Plant_Liquids_Production)
-arima_model_total_fossil_fuels <- auto.arima(data_tsibble$Total_Fossil_Fuels_Production)
-arima_model_nuclear_electric_power <- auto.arima(data_tsibble$Nuclear_Electric_Power_Production)
-arima_model_hydroelectric_power <- auto.arima(data_tsibble$Hydroelectric_Power_Production)
-arima_model_geothermal_energy <- auto.arima(data_tsibble$Geothermal_Energy_Production)
-arima_model_solar_energy <- auto.arima(data_tsibble$Solar_Energy_Production)
-arima_model_wind_energy <- auto.arima(data_tsibble$Wind_Energy_Production)
-arima_model_biomass_energy <- auto.arima(data_tsibble$Biomass_Energy_Production)
-arima_model_total_renewable_energy <- auto.arima(data_tsibble$Total_Renewable_Energy_Production)
-arima_model_total_primary_energy <- auto.arima(data_tsibble$Total_Primary_Energy_Production)
+arima_model_total_fossil_fuels        <- auto.arima(data_tsibble$Total_Fossil_Fuels_Production)
+arima_model_nuclear_electric_power    <- auto.arima(data_tsibble$Nuclear_Electric_Power_Production)
+arima_model_hydroelectric_power       <- auto.arima(data_tsibble$Hydroelectric_Power_Production)
+arima_model_geothermal_energy         <- auto.arima(data_tsibble$Geothermal_Energy_Production)
+arima_model_solar_energy              <- auto.arima(data_tsibble$Solar_Energy_Production)
+arima_model_wind_energy               <- auto.arima(data_tsibble$Wind_Energy_Production)
+arima_model_biomass_energy            <- auto.arima(data_tsibble$Biomass_Energy_Production)
+arima_model_total_renewable_energy    <- auto.arima(data_tsibble$Total_Renewable_Energy_Production)
+arima_model_total_primary_energy      <- auto.arima(data_tsibble$Total_Primary_Energy_Production)
 
 # Forecast using the ARIMA model
-forecast_result_coal <- forecast(arima_model_coal, h = 24)
-forecast_result_natural_gas_dry <- forecast(arima_model_natural_gas_dry, h = 24)
-forecast_result_crude_oil <- forecast(arima_model_crude_oil, h = 24)
-forecast_result_natural_gas_plant_liquids <- forecast(arima_model_natural_gas_plant_liquids, h = 24)
-forecast_result_total_fossil_fuels <- forecast(arima_model_total_fossil_fuels, h = 24)
-forecast_result_nuclear_electric_power <- forecast(arima_model_nuclear_electric_power, h = 24)
-forecast_result_hydroelectric_power <- forecast(arima_model_hydroelectric_power, h = 24)
-forecast_result_geothermal_energy <- forecast(arima_model_geothermal_energy, h = 24)
-forecast_result_solar_energy <- forecast(arima_model_solar_energy, h = 24)
-forecast_result_wind_energy <- forecast(arima_model_wind_energy, h = 24)
-forecast_result_biomass_energy <- forecast(arima_model_biomass_energy, h = 24)
-forecast_result_total_renewable_energy <- forecast(arima_model_total_renewable_energy, h = 24)
-forecast_result_total_primary_energy <- forecast(arima_model_total_primary_energy, h = 24)
+forecast_result_coal                      <- forecast(arima_model_coal, h = period)
+forecast_result_natural_gas_dry           <- forecast(arima_model_natural_gas_dry, h = period)
+forecast_result_crude_oil                 <- forecast(arima_model_crude_oil, h = period)
+forecast_result_natural_gas_plant_liquids <- forecast(arima_model_natural_gas_plant_liquids, h = period)
+forecast_result_total_fossil_fuels        <- forecast(arima_model_total_fossil_fuels, h = period)
+forecast_result_nuclear_electric_power    <- forecast(arima_model_nuclear_electric_power, h = period)
+forecast_result_hydroelectric_power       <- forecast(arima_model_hydroelectric_power, h = period)
+forecast_result_geothermal_energy         <- forecast(arima_model_geothermal_energy, h = period)
+forecast_result_solar_energy              <- forecast(arima_model_solar_energy, h = period)
+forecast_result_wind_energy               <- forecast(arima_model_wind_energy, h = period)
+forecast_result_biomass_energy            <- forecast(arima_model_biomass_energy, h = period)
+forecast_result_total_renewable_energy    <- forecast(arima_model_total_renewable_energy, h = period)
+forecast_result_total_primary_energy      <- forecast(arima_model_total_primary_energy, h = period)
 
-
-# Plot the forecast
+# Plot the forecasts
+# Coal
 p_coal <- autoplot(forecast_result_coal) +
   labs(title = "ARIMA Forecast of Coal Production",
        y = "Coal Production",
        x = "Time")
+
+# Natural Gas Dry
 p_natural_gas_dry <- autoplot(forecast_result_natural_gas_dry) +
   labs(title = "ARIMA Forecast of Natural Gas Dry Production",
        y = "Natural Gas Dry Production",
        x = "Time")
+
+# Crude Oil
 p_crude_oil <- autoplot(forecast_result_crude_oil) +
   labs(title = "ARIMA Forecast of Crude Oil Production",
        y = "Crude Oil Production",
        x = "Time")
+
+# Natural Gas Plant Liquids
 p_natural_gas_plant_liquids <- autoplot(forecast_result_natural_gas_plant_liquids) +
   labs(title = "ARIMA Forecast of Natural Gas Plant Liquids Production",
        y = "Natural Gas Plant Liquids Production",
        x = "Time")
+
+# Total Fossil Fuels
 p_total_fossil_fuels <- autoplot(forecast_result_total_fossil_fuels) +
   labs(title = "ARIMA Forecast of Total Fossil Fuels Production",
        y = "Total Fossil Fuels Production",
        x = "Time")
+
+# Nuclear Electric Power
 p_nuclear_electric_power <- autoplot(forecast_result_nuclear_electric_power) +
   labs(title = "ARIMA Forecast of Nuclear Electric Power Production",
        y = "Nuclear Electric Power Production",
        x = "Time")
+
+# Hydroelectric Power
 p_hydroelectric_power <- autoplot(forecast_result_hydroelectric_power) +
   labs(title = "ARIMA Forecast of Hydroelectric Power Production",
        y = "Hydroelectric Power Production",
        x = "Time")
+
+# Geothermal Energy
 p_geothermal_energy <- autoplot(forecast_result_geothermal_energy) +
   labs(title = "ARIMA Forecast of Geothermal Energy Production",
        y = "Geothermal Energy Production",
        x = "Time")
+
+# Solar Energy
 p_solar_energy <- autoplot(forecast_result_solar_energy) +
   labs(title = "ARIMA Forecast of Solar Energy Production",
        y = "Solar Energy Production",
        x = "Time")
+
+# Wind Energy
 p_wind_energy <- autoplot(forecast_result_wind_energy) +
   labs(title = "ARIMA Forecast of Wind Energy Production",
        y = "Wind Energy Production",
        x = "Time")
+
+# Biomass Energy
 p_biomass_energy <- autoplot(forecast_result_biomass_energy) +
   labs(title = "ARIMA Forecast of Biomass Energy Production",
        y = "Biomass Energy Production",
        x = "Time")
+
+# Total Renewable Energy
 p_total_renewable_energy <- autoplot(forecast_result_total_renewable_energy) +
   labs(title = "ARIMA Forecast of Total Renewable Energy Production",
        y = "Total Renewable Energy Production",
        x = "Time")
+
+# Total Primary Energy
 p_total_primary_energy <- autoplot(forecast_result_total_primary_energy) +
   labs(title = "ARIMA Forecast of Total Primary Energy Production",
        y = "Total Primary Energy Production",
        x = "Time")
 
+# Combine all the plots
 final_plot <- p_coal + p_natural_gas_dry + p_crude_oil + p_natural_gas_plant_liquids +
               p_total_fossil_fuels + p_nuclear_electric_power + p_hydroelectric_power +
               p_geothermal_energy + p_solar_energy + p_wind_energy + p_biomass_energy +
@@ -123,53 +151,50 @@ final_plot <- p_coal + p_natural_gas_dry + p_crude_oil + p_natural_gas_plant_liq
               plot_layout(guides = 'collect') & 
               theme(legend.position = "bottom")
 
-# Affichage du résultat
+# Plot
 print(final_plot)
 ```
 
+
 ```{r}
-models <- list(
-  Coal = auto.arima(data_tsibble$Coal_Production),
-  Natural_Gas_Dry = auto.arima(data_tsibble$Natural_Gas_Dry_Production),
-  Crude_Oil = auto.arima(data_tsibble$Crude_Oil_Production),
-  Natural_Gas_Liquids = auto.arima(data_tsibble$Natural_Gas_Plant_Liquids_Production),
-  Total_Fossil_Fuels = auto.arima(data_tsibble$Total_Fossil_Fuels_Production),
-  Nuclear_Power = auto.arima(data_tsibble$Nuclear_Electric_Power_Production),
-  Hydroelectric_Power = auto.arima(data_tsibble$Hydroelectric_Power_Production),
-  Geothermal_Energy = auto.arima(data_tsibble$Geothermal_Energy_Production),
-  Solar_Energy = auto.arima(data_tsibble$Solar_Energy_Production),
-  Wind_Energy = auto.arima(data_tsibble$Wind_Energy_Production),
-  Biomass_Energy = auto.arima(data_tsibble$Biomass_Energy_Production),
-  Total_Renewable_Energy = auto.arima(data_tsibble$Total_Renewable_Energy_Production),
-  Total_Primary_Energy = auto.arima(data_tsibble$Total_Primary_Energy_Production)
+# Store all models in a list
+model_list <- list(
+  Coal_Production = arima_model_coal,
+  Natural_Gas_Dry_Production = arima_model_natural_gas_dry,
+  Crude_Oil_Production = arima_model_crude_oil,
+  Natural_Gas_Plant_Liquids_Production = arima_model_natural_gas_plant_liquids,
+  Total_Fossil_Fuels_Production = arima_model_total_fossil_fuels,
+  Nuclear_Electric_Power_Production = arima_model_nuclear_electric_power,
+  Hydroelectric_Power_Production = arima_model_hydroelectric_power,
+  Geothermal_Energy_Production = arima_model_geothermal_energy,
+  Solar_Energy_Production = arima_model_solar_energy,
+  Wind_Energy_Production = arima_model_wind_energy,
+  Biomass_Energy_Production = arima_model_biomass_energy,
+  Total_Renewable_Energy_Production = arima_model_total_renewable_energy,
+  Total_Primary_Energy_Production = arima_model_total_primary_energy
 )
 
-# Define a function to extract model orders safely
-extract_model_orders <- function(model) {
-  # Extract the non-seasonal order
-  non_seasonal_order <- paste(model$order[1], model$order[2], model$order[3], sep=",")
-  
-  # Check and extract the seasonal order, if present
-  if ("seasonal" %in% names(model) && !is.null(model$seasonal$order)) {
-    seasonal_order <- paste(model$seasonal$order[1], model$seasonal$order[2], model$seasonal$order[3], sep=",")
-  } else {
-    seasonal_order <- "0,0,0"  # No seasonal component
-  }
-  
-  # Return a data frame row
-  data.frame(
-    Model = names(model),
-    NonSeasonal_Order = non_seasonal_order,
-    Seasonal_Order = seasonal_order,
-    stringsAsFactors = FALSE
-  )
+# Initialize an empty data frame to store the results
+model_orders <- data.frame(
+  Model = character(0),
+  AR = integer(0),
+  I = integer(0),
+  MA = integer(0),
+  stringsAsFactors = FALSE  # Set stringsAsFactors to FALSE to keep character strings
+)
+
+# Loop through each model in the list, retrieve order, and add to the data frame
+for (model_name in names(model_list)) {
+  order <- arimaorder(model_list[[model_name]])
+  model_orders <- rbind(model_orders, data.frame(Model=model_name, AR=order[1], I=order[2], MA=order[3]))
 }
 
-# Apply the function to each model and combine results
-model_orders_df <- do.call(rbind, lapply(models, extract_model_orders))
 
-# Print the resulting data frame
-print(model_orders_df)
+# Load knitr for nicer table formatting
+library(knitr)
+
+# Display the table using kable
+kable(model_orders, caption = "ARIMA Orders of Energy Production Models", row.names = FALSE)
 ```
 
 

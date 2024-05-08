@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -22,7 +22,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -79,23 +79,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run the setup.R script to load the packages</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data and the packages</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"scripts"</span>, <span class="st">"setup.R"</span>))</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the packages</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"data_export_20240424.csv"</span>), <span class="at">sep =</span> <span class="st">";"</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># replace the NA with 0</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(<span class="sc">~</span> <span class="fu">ifelse</span>(. <span class="sc">==</span> <span class="st">"Not Available"</span>,<span class="dv">0</span>, .))</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'Month' column to a date type</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Month <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(data<span class="sc">$</span>Month, <span class="at">format =</span> <span class="st">"%d.%m.%y"</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for non-numeric columns</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>non_numeric_cols <span class="ot">&lt;-</span> <span class="fu">sapply</span>(data, <span class="cf">function</span>(x) <span class="sc">!</span><span class="fu">is.numeric</span>(x))</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data)[non_numeric_cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"data_export_20240424.csv"</span>), <span class="at">sep =</span> <span class="st">";"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># replace the NA with 0</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(<span class="sc">~</span> <span class="fu">ifelse</span>(. <span class="sc">==</span> <span class="st">"Not Available"</span>,<span class="dv">0</span>, .))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'Month' column to a date type</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Month <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(data<span class="sc">$</span>Month, <span class="at">format =</span> <span class="st">"%d.%m.%y"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for non-numeric columns</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>non_numeric_cols <span class="ot">&lt;-</span> <span class="fu">sapply</span>(data, <span class="cf">function</span>(x) <span class="sc">!</span><span class="fu">is.numeric</span>(x))</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data)[non_numeric_cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Month"                   "Solar_Energy_Production"
 [3] "Wind_Energy_Production" </code></pre>
@@ -125,1836 +124,269 @@ Natural_Gas_Plant_Liquids_Production        Total_Fossil_Fuels_Production
    Total_Renewable_Energy_Production      Total_Primary_Energy_Production 
                            "numeric"                            "numeric" </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We have only "numeric" class</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We have only "numeric" class OK</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Forecast period</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>period <span class="ot">&lt;-</span> <span class="dv">24</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="arima-model" class="level2">
 <h2 class="anchored" data-anchor-id="arima-model">ARIMA Model</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit ARIMA models for all the type of production</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>arima_model_coal <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Coal_Production)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>arima_model_natural_gas_dry <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Natural_Gas_Dry_Production)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>arima_model_crude_oil <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Crude_Oil_Production)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>arima_model_coal                      <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Coal_Production)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>arima_model_natural_gas_dry           <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Natural_Gas_Dry_Production)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>arima_model_crude_oil                 <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Crude_Oil_Production)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>arima_model_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Natural_Gas_Plant_Liquids_Production)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>arima_model_total_fossil_fuels <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Fossil_Fuels_Production)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>arima_model_nuclear_electric_power <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Nuclear_Electric_Power_Production)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>arima_model_hydroelectric_power <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Hydroelectric_Power_Production)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>arima_model_geothermal_energy <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Geothermal_Energy_Production)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>arima_model_solar_energy <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Solar_Energy_Production)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>arima_model_wind_energy <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Wind_Energy_Production)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>arima_model_biomass_energy <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Biomass_Energy_Production)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>arima_model_total_renewable_energy <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Renewable_Energy_Production)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>arima_model_total_primary_energy <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Primary_Energy_Production)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>arima_model_total_fossil_fuels        <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Fossil_Fuels_Production)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>arima_model_nuclear_electric_power    <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Nuclear_Electric_Power_Production)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>arima_model_hydroelectric_power       <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Hydroelectric_Power_Production)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>arima_model_geothermal_energy         <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Geothermal_Energy_Production)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>arima_model_solar_energy              <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Solar_Energy_Production)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>arima_model_wind_energy               <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Wind_Energy_Production)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>arima_model_biomass_energy            <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Biomass_Energy_Production)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>arima_model_total_renewable_energy    <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Renewable_Energy_Production)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>arima_model_total_primary_energy      <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Primary_Energy_Production)</span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Forecast using the ARIMA model</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>forecast_result_coal <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_coal, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>forecast_result_natural_gas_dry <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_natural_gas_dry, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>forecast_result_crude_oil <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_crude_oil, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>forecast_result_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_natural_gas_plant_liquids, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>forecast_result_total_fossil_fuels <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_fossil_fuels, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>forecast_result_nuclear_electric_power <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_nuclear_electric_power, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>forecast_result_hydroelectric_power <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_hydroelectric_power, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>forecast_result_geothermal_energy <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_geothermal_energy, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>forecast_result_solar_energy <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_solar_energy, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>forecast_result_wind_energy <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_wind_energy, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>forecast_result_biomass_energy <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_biomass_energy, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>forecast_result_total_renewable_energy <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_renewable_energy, <span class="at">h =</span> <span class="dv">24</span>)</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>forecast_result_total_primary_energy <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_primary_energy, <span class="at">h =</span> <span class="dv">24</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>forecast_result_coal                      <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_coal, <span class="at">h =</span> period)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>forecast_result_natural_gas_dry           <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_natural_gas_dry, <span class="at">h =</span> period)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>forecast_result_crude_oil                 <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_crude_oil, <span class="at">h =</span> period)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>forecast_result_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_natural_gas_plant_liquids, <span class="at">h =</span> period)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>forecast_result_total_fossil_fuels        <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_fossil_fuels, <span class="at">h =</span> period)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>forecast_result_nuclear_electric_power    <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_nuclear_electric_power, <span class="at">h =</span> period)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>forecast_result_hydroelectric_power       <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_hydroelectric_power, <span class="at">h =</span> period)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>forecast_result_geothermal_energy         <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_geothermal_energy, <span class="at">h =</span> period)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>forecast_result_solar_energy              <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_solar_energy, <span class="at">h =</span> period)</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>forecast_result_wind_energy               <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_wind_energy, <span class="at">h =</span> period)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>forecast_result_biomass_energy            <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_biomass_energy, <span class="at">h =</span> period)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>forecast_result_total_renewable_energy    <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_renewable_energy, <span class="at">h =</span> period)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>forecast_result_total_primary_energy      <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_primary_energy, <span class="at">h =</span> period)</span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the forecast</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the forecasts</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Coal</span></span>
 <span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>p_coal <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_coal) <span class="sc">+</span></span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Coal Production"</span>,</span>
 <span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Coal Production"</span>,</span>
 <span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>p_natural_gas_dry <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_natural_gas_dry) <span class="sc">+</span></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Natural Gas Dry Production"</span>,</span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Natural Gas Dry Production"</span>,</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>p_crude_oil <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_crude_oil) <span class="sc">+</span></span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Crude Oil Production"</span>,</span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Crude Oil Production"</span>,</span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>p_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_natural_gas_plant_liquids) <span class="sc">+</span></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Natural Gas Plant Liquids Production"</span>,</span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Natural Gas Plant Liquids Production"</span>,</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Natural Gas Dry</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>p_natural_gas_dry <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_natural_gas_dry) <span class="sc">+</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Natural Gas Dry Production"</span>,</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Natural Gas Dry Production"</span>,</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Crude Oil</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>p_crude_oil <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_crude_oil) <span class="sc">+</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Crude Oil Production"</span>,</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Crude Oil Production"</span>,</span>
 <span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>p_total_fossil_fuels <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_fossil_fuels) <span class="sc">+</span></span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Fossil Fuels Production"</span>,</span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Fossil Fuels Production"</span>,</span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>p_nuclear_electric_power <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_nuclear_electric_power) <span class="sc">+</span></span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Nuclear Electric Power Production"</span>,</span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Nuclear Electric Power Production"</span>,</span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>p_hydroelectric_power <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_hydroelectric_power) <span class="sc">+</span></span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Hydroelectric Power Production"</span>,</span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Hydroelectric Power Production"</span>,</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Natural Gas Plant Liquids</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>p_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_natural_gas_plant_liquids) <span class="sc">+</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Natural Gas Plant Liquids Production"</span>,</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Natural Gas Plant Liquids Production"</span>,</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Total Fossil Fuels</span></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>p_total_fossil_fuels <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_fossil_fuels) <span class="sc">+</span></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Fossil Fuels Production"</span>,</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Fossil Fuels Production"</span>,</span>
 <span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>p_geothermal_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_geothermal_energy) <span class="sc">+</span></span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Geothermal Energy Production"</span>,</span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Geothermal Energy Production"</span>,</span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>p_solar_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_solar_energy) <span class="sc">+</span></span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Solar Energy Production"</span>,</span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Solar Energy Production"</span>,</span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>p_wind_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_wind_energy) <span class="sc">+</span></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Wind Energy Production"</span>,</span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Wind Energy Production"</span>,</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Nuclear Electric Power</span></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>p_nuclear_electric_power <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_nuclear_electric_power) <span class="sc">+</span></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Nuclear Electric Power Production"</span>,</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Nuclear Electric Power Production"</span>,</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Hydroelectric Power</span></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>p_hydroelectric_power <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_hydroelectric_power) <span class="sc">+</span></span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Hydroelectric Power Production"</span>,</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Hydroelectric Power Production"</span>,</span>
 <span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>p_biomass_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_biomass_energy) <span class="sc">+</span></span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Biomass Energy Production"</span>,</span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Biomass Energy Production"</span>,</span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>p_total_renewable_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_renewable_energy) <span class="sc">+</span></span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Renewable Energy Production"</span>,</span>
-<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Renewable Energy Production"</span>,</span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>p_total_primary_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_primary_energy) <span class="sc">+</span></span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Primary Energy Production"</span>,</span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Primary Energy Production"</span>,</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Geothermal Energy</span></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>p_geothermal_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_geothermal_energy) <span class="sc">+</span></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Geothermal Energy Production"</span>,</span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Geothermal Energy Production"</span>,</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Solar Energy</span></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>p_solar_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_solar_energy) <span class="sc">+</span></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Solar Energy Production"</span>,</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Solar Energy Production"</span>,</span>
 <span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
 <span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>final_plot <span class="ot">&lt;-</span> p_coal <span class="sc">+</span> p_natural_gas_dry <span class="sc">+</span> p_crude_oil <span class="sc">+</span> p_natural_gas_plant_liquids <span class="sc">+</span></span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>              p_total_fossil_fuels <span class="sc">+</span> p_nuclear_electric_power <span class="sc">+</span> p_hydroelectric_power <span class="sc">+</span></span>
-<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>              p_geothermal_energy <span class="sc">+</span> p_solar_energy <span class="sc">+</span> p_wind_energy <span class="sc">+</span> p_biomass_energy <span class="sc">+</span></span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>              p_total_renewable_energy <span class="sc">+</span> p_total_primary_energy <span class="sc">+</span></span>
-<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>              <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">'collect'</span>) <span class="sc">&amp;</span> </span>
-<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>              <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
-<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a><span class="co"># Affichage du résultat</span></span>
-<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(final_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a><span class="co"># Wind Energy</span></span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>p_wind_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_wind_energy) <span class="sc">+</span></span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Wind Energy Production"</span>,</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Wind Energy Production"</span>,</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Biomass Energy</span></span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>p_biomass_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_biomass_energy) <span class="sc">+</span></span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Biomass Energy Production"</span>,</span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Biomass Energy Production"</span>,</span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a><span class="co"># Total Renewable Energy</span></span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>p_total_renewable_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_renewable_energy) <span class="sc">+</span></span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Renewable Energy Production"</span>,</span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Renewable Energy Production"</span>,</span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a><span class="co"># Total Primary Energy</span></span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>p_total_primary_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_primary_energy) <span class="sc">+</span></span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Primary Energy Production"</span>,</span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Primary Energy Production"</span>,</span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine all the plots</span></span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>final_plot <span class="ot">&lt;-</span> p_coal <span class="sc">+</span> p_natural_gas_dry <span class="sc">+</span> p_crude_oil <span class="sc">+</span> p_natural_gas_plant_liquids <span class="sc">+</span></span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>              p_total_fossil_fuels <span class="sc">+</span> p_nuclear_electric_power <span class="sc">+</span> p_hydroelectric_power <span class="sc">+</span></span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>              p_geothermal_energy <span class="sc">+</span> p_solar_energy <span class="sc">+</span> p_wind_energy <span class="sc">+</span> p_biomass_energy <span class="sc">+</span></span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>              p_total_renewable_energy <span class="sc">+</span> p_total_primary_energy <span class="sc">+</span></span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>              <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">'collect'</span>) <span class="sc">&amp;</span> </span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>              <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(final_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="ARIMA_files/figure-html/ARIMA%20Model-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="ARIMA_files/figure-html/ARIMA%20Model%20and%20plots-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Coal =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Coal_Production),</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Natural_Gas_Dry =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Natural_Gas_Dry_Production),</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Crude_Oil =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Crude_Oil_Production),</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Natural_Gas_Liquids =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Natural_Gas_Plant_Liquids_Production),</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Total_Fossil_Fuels =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Fossil_Fuels_Production),</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Nuclear_Power =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Nuclear_Electric_Power_Production),</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Hydroelectric_Power =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Hydroelectric_Power_Production),</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Geothermal_Energy =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Geothermal_Energy_Production),</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Solar_Energy =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Solar_Energy_Production),</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Wind_Energy =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Wind_Energy_Production),</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Biomass_Energy =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Biomass_Energy_Production),</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Total_Renewable_Energy =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Renewable_Energy_Production),</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Total_Primary_Energy =</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Primary_Energy_Production)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Manually extract model details</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>model_details <span class="ot">&lt;-</span> <span class="fu">map</span>(models, <span class="cf">function</span>(model) {</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">Model =</span> <span class="fu">names</span>(model),</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">ARIMA_Order =</span> <span class="fu">paste</span>(model<span class="sc">$</span>arma[<span class="dv">1</span>], model<span class="sc">$</span>arma[<span class="dv">2</span>], model<span class="sc">$</span>arma[<span class="dv">3</span>], <span class="at">sep=</span><span class="st">","</span>),</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">Seasonal_Order =</span> <span class="fu">paste</span>(model<span class="sc">$</span>arma[<span class="dv">4</span>], model<span class="sc">$</span>arma[<span class="dv">5</span>], model<span class="sc">$</span>arma[<span class="dv">6</span>], <span class="at">sep=</span><span class="st">","</span>),</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">AIC =</span> model<span class="sc">$</span>aic</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>})</span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Store all models in a list</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Coal_Production =</span> arima_model_coal,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Natural_Gas_Dry_Production =</span> arima_model_natural_gas_dry,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Crude_Oil_Production =</span> arima_model_crude_oil,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Natural_Gas_Plant_Liquids_Production =</span> arima_model_natural_gas_plant_liquids,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Total_Fossil_Fuels_Production =</span> arima_model_total_fossil_fuels,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Nuclear_Electric_Power_Production =</span> arima_model_nuclear_electric_power,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Hydroelectric_Power_Production =</span> arima_model_hydroelectric_power,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Geothermal_Energy_Production =</span> arima_model_geothermal_energy,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Solar_Energy_Production =</span> arima_model_solar_energy,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Wind_Energy_Production =</span> arima_model_wind_energy,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Biomass_Energy_Production =</span> arima_model_biomass_energy,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Total_Renewable_Energy_Production =</span> arima_model_total_renewable_energy,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">Total_Primary_Energy_Production =</span> arima_model_total_primary_energy</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize an empty data frame to store the results</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>model_orders <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">character</span>(<span class="dv">0</span>),</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">AR =</span> <span class="fu">integer</span>(<span class="dv">0</span>),</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">I =</span> <span class="fu">integer</span>(<span class="dv">0</span>),</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">MA =</span> <span class="fu">integer</span>(<span class="dv">0</span>),</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>  <span class="co"># Set stringsAsFactors to FALSE to keep character strings</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine into a single data frame</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>model_details_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(model_details)</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co"># View the results</span></span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(model_details_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>        Model ARIMA_Order Seasonal_Order        AIC
-1        coef       5,2,0          0,1,1  -847.2336
-2      sigma2       5,2,0          0,1,1  -847.2336
-3    var.coef       5,2,0          0,1,1  -847.2336
-4        mask       5,2,0          0,1,1  -847.2336
-5      loglik       5,2,0          0,1,1  -847.2336
-6         aic       5,2,0          0,1,1  -847.2336
-7        arma       5,2,0          0,1,1  -847.2336
-8   residuals       5,2,0          0,1,1  -847.2336
-9        call       5,2,0          0,1,1  -847.2336
-10     series       5,2,0          0,1,1  -847.2336
-11       code       5,2,0          0,1,1  -847.2336
-12     n.cond       5,2,0          0,1,1  -847.2336
-13       nobs       5,2,0          0,1,1  -847.2336
-14      model       5,2,0          0,1,1  -847.2336
-15        bic       5,2,0          0,1,1  -847.2336
-16       aicc       5,2,0          0,1,1  -847.2336
-17          x       5,2,0          0,1,1  -847.2336
-18     fitted       5,2,0          0,1,1  -847.2336
-19       coef       0,4,0          0,1,2 -1379.1977
-20     sigma2       0,4,0          0,1,2 -1379.1977
-21   var.coef       0,4,0          0,1,2 -1379.1977
-22       mask       0,4,0          0,1,2 -1379.1977
-23     loglik       0,4,0          0,1,2 -1379.1977
-24        aic       0,4,0          0,1,2 -1379.1977
-25       arma       0,4,0          0,1,2 -1379.1977
-26  residuals       0,4,0          0,1,2 -1379.1977
-27       call       0,4,0          0,1,2 -1379.1977
-28     series       0,4,0          0,1,2 -1379.1977
-29       code       0,4,0          0,1,2 -1379.1977
-30     n.cond       0,4,0          0,1,2 -1379.1977
-31       nobs       0,4,0          0,1,2 -1379.1977
-32      model       0,4,0          0,1,2 -1379.1977
-33        bic       0,4,0          0,1,2 -1379.1977
-34       aicc       0,4,0          0,1,2 -1379.1977
-35          x       0,4,0          0,1,2 -1379.1977
-36     fitted       0,4,0          0,1,2 -1379.1977
-37       coef       2,1,0          0,1,2 -1716.3481
-38     sigma2       2,1,0          0,1,2 -1716.3481
-39   var.coef       2,1,0          0,1,2 -1716.3481
-40       mask       2,1,0          0,1,2 -1716.3481
-41     loglik       2,1,0          0,1,2 -1716.3481
-42        aic       2,1,0          0,1,2 -1716.3481
-43       arma       2,1,0          0,1,2 -1716.3481
-44  residuals       2,1,0          0,1,2 -1716.3481
-45       call       2,1,0          0,1,2 -1716.3481
-46     series       2,1,0          0,1,2 -1716.3481
-47       code       2,1,0          0,1,2 -1716.3481
-48     n.cond       2,1,0          0,1,2 -1716.3481
-49       nobs       2,1,0          0,1,2 -1716.3481
-50      model       2,1,0          0,1,2 -1716.3481
-51        bic       2,1,0          0,1,2 -1716.3481
-52       aicc       2,1,0          0,1,2 -1716.3481
-53          x       2,1,0          0,1,2 -1716.3481
-54     fitted       2,1,0          0,1,2 -1716.3481
-55       coef       3,2,0          0,1,2 -3444.2345
-56     sigma2       3,2,0          0,1,2 -3444.2345
-57   var.coef       3,2,0          0,1,2 -3444.2345
-58       mask       3,2,0          0,1,2 -3444.2345
-59     loglik       3,2,0          0,1,2 -3444.2345
-60        aic       3,2,0          0,1,2 -3444.2345
-61       arma       3,2,0          0,1,2 -3444.2345
-62  residuals       3,2,0          0,1,2 -3444.2345
-63       call       3,2,0          0,1,2 -3444.2345
-64     series       3,2,0          0,1,2 -3444.2345
-65       code       3,2,0          0,1,2 -3444.2345
-66     n.cond       3,2,0          0,1,2 -3444.2345
-67       nobs       3,2,0          0,1,2 -3444.2345
-68      model       3,2,0          0,1,2 -3444.2345
-69        bic       3,2,0          0,1,2 -3444.2345
-70       aicc       3,2,0          0,1,2 -3444.2345
-71          x       3,2,0          0,1,2 -3444.2345
-72     fitted       3,2,0          0,1,2 -3444.2345
-73       coef       5,1,0          0,1,1  -268.7747
-74     sigma2       5,1,0          0,1,1  -268.7747
-75   var.coef       5,1,0          0,1,1  -268.7747
-76       mask       5,1,0          0,1,1  -268.7747
-77     loglik       5,1,0          0,1,1  -268.7747
-78        aic       5,1,0          0,1,1  -268.7747
-79       arma       5,1,0          0,1,1  -268.7747
-80  residuals       5,1,0          0,1,1  -268.7747
-81       call       5,1,0          0,1,1  -268.7747
-82     series       5,1,0          0,1,1  -268.7747
-83       code       5,1,0          0,1,1  -268.7747
-84     n.cond       5,1,0          0,1,1  -268.7747
-85       nobs       5,1,0          0,1,1  -268.7747
-86      model       5,1,0          0,1,1  -268.7747
-87        bic       5,1,0          0,1,1  -268.7747
-88       aicc       5,1,0          0,1,1  -268.7747
-89          x       5,1,0          0,1,1  -268.7747
-90     fitted       5,1,0          0,1,1  -268.7747
-91       coef       1,5,0          0,1,1 -2334.2824
-92     sigma2       1,5,0          0,1,1 -2334.2824
-93   var.coef       1,5,0          0,1,1 -2334.2824
-94       mask       1,5,0          0,1,1 -2334.2824
-95     loglik       1,5,0          0,1,1 -2334.2824
-96        aic       1,5,0          0,1,1 -2334.2824
-97       arma       1,5,0          0,1,1 -2334.2824
-98  residuals       1,5,0          0,1,1 -2334.2824
-99       call       1,5,0          0,1,1 -2334.2824
-100    series       1,5,0          0,1,1 -2334.2824
-101      code       1,5,0          0,1,1 -2334.2824
-102    n.cond       1,5,0          0,1,1 -2334.2824
-103      nobs       1,5,0          0,1,1 -2334.2824
-104     model       1,5,0          0,1,1 -2334.2824
-105      xreg       1,5,0          0,1,1 -2334.2824
-106       bic       1,5,0          0,1,1 -2334.2824
-107      aicc       1,5,0          0,1,1 -2334.2824
-108         x       1,5,0          0,1,1 -2334.2824
-109    fitted       1,5,0          0,1,1 -2334.2824
-110      coef       1,3,0          0,1,0 -4103.2290
-111    sigma2       1,3,0          0,1,0 -4103.2290
-112  var.coef       1,3,0          0,1,0 -4103.2290
-113      mask       1,3,0          0,1,0 -4103.2290
-114    loglik       1,3,0          0,1,0 -4103.2290
-115       aic       1,3,0          0,1,0 -4103.2290
-116      arma       1,3,0          0,1,0 -4103.2290
-117 residuals       1,3,0          0,1,0 -4103.2290
-118      call       1,3,0          0,1,0 -4103.2290
-119    series       1,3,0          0,1,0 -4103.2290
-120      code       1,3,0          0,1,0 -4103.2290
-121    n.cond       1,3,0          0,1,0 -4103.2290
-122      nobs       1,3,0          0,1,0 -4103.2290
-123     model       1,3,0          0,1,0 -4103.2290
-124       bic       1,3,0          0,1,0 -4103.2290
-125      aicc       1,3,0          0,1,0 -4103.2290
-126         x       1,3,0          0,1,0 -4103.2290
-127    fitted       1,3,0          0,1,0 -4103.2290
-128      coef       3,2,0          0,1,1 -7928.4043
-129    sigma2       3,2,0          0,1,1 -7928.4043
-130  var.coef       3,2,0          0,1,1 -7928.4043
-131      mask       3,2,0          0,1,1 -7928.4043
-132    loglik       3,2,0          0,1,1 -7928.4043
-133       aic       3,2,0          0,1,1 -7928.4043
-134      arma       3,2,0          0,1,1 -7928.4043
-135 residuals       3,2,0          0,1,1 -7928.4043
-136      call       3,2,0          0,1,1 -7928.4043
-137    series       3,2,0          0,1,1 -7928.4043
-138      code       3,2,0          0,1,1 -7928.4043
-139    n.cond       3,2,0          0,1,1 -7928.4043
-140      nobs       3,2,0          0,1,1 -7928.4043
-141     model       3,2,0          0,1,1 -7928.4043
-142      xreg       3,2,0          0,1,1 -7928.4043
-143       bic       3,2,0          0,1,1 -7928.4043
-144      aicc       3,2,0          0,1,1 -7928.4043
-145         x       3,2,0          0,1,1 -7928.4043
-146    fitted       3,2,0          0,1,1 -7928.4043
-147      coef       3,1,0          0,1,1 -6274.7066
-148    sigma2       3,1,0          0,1,1 -6274.7066
-149  var.coef       3,1,0          0,1,1 -6274.7066
-150      mask       3,1,0          0,1,1 -6274.7066
-151    loglik       3,1,0          0,1,1 -6274.7066
-152       aic       3,1,0          0,1,1 -6274.7066
-153      arma       3,1,0          0,1,1 -6274.7066
-154 residuals       3,1,0          0,1,1 -6274.7066
-155      call       3,1,0          0,1,1 -6274.7066
-156    series       3,1,0          0,1,1 -6274.7066
-157      code       3,1,0          0,1,1 -6274.7066
-158    n.cond       3,1,0          0,1,1 -6274.7066
-159      nobs       3,1,0          0,1,1 -6274.7066
-160     model       3,1,0          0,1,1 -6274.7066
-161      xreg       3,1,0          0,1,1 -6274.7066
-162       bic       3,1,0          0,1,1 -6274.7066
-163      aicc       3,1,0          0,1,1 -6274.7066
-164         x       3,1,0          0,1,1 -6274.7066
-165    fitted       3,1,0          0,1,1 -6274.7066
-166      coef       0,0,0          0,1,1 -4573.2080
-167    sigma2       0,0,0          0,1,1 -4573.2080
-168  var.coef       0,0,0          0,1,1 -4573.2080
-169      mask       0,0,0          0,1,1 -4573.2080
-170    loglik       0,0,0          0,1,1 -4573.2080
-171       aic       0,0,0          0,1,1 -4573.2080
-172      arma       0,0,0          0,1,1 -4573.2080
-173 residuals       0,0,0          0,1,1 -4573.2080
-174      call       0,0,0          0,1,1 -4573.2080
-175    series       0,0,0          0,1,1 -4573.2080
-176      code       0,0,0          0,1,1 -4573.2080
-177    n.cond       0,0,0          0,1,1 -4573.2080
-178      nobs       0,0,0          0,1,1 -4573.2080
-179     model       0,0,0          0,1,1 -4573.2080
-180       bic       0,0,0          0,1,1 -4573.2080
-181      aicc       0,0,0          0,1,1 -4573.2080
-182         x       0,0,0          0,1,1 -4573.2080
-183    fitted       0,0,0          0,1,1 -4573.2080
-184      coef       5,2,0          0,1,1 -3268.7052
-185    sigma2       5,2,0          0,1,1 -3268.7052
-186  var.coef       5,2,0          0,1,1 -3268.7052
-187      mask       5,2,0          0,1,1 -3268.7052
-188    loglik       5,2,0          0,1,1 -3268.7052
-189       aic       5,2,0          0,1,1 -3268.7052
-190      arma       5,2,0          0,1,1 -3268.7052
-191 residuals       5,2,0          0,1,1 -3268.7052
-192      call       5,2,0          0,1,1 -3268.7052
-193    series       5,2,0          0,1,1 -3268.7052
-194      code       5,2,0          0,1,1 -3268.7052
-195    n.cond       5,2,0          0,1,1 -3268.7052
-196      nobs       5,2,0          0,1,1 -3268.7052
-197     model       5,2,0          0,1,1 -3268.7052
-198      xreg       5,2,0          0,1,1 -3268.7052
-199       bic       5,2,0          0,1,1 -3268.7052
-200      aicc       5,2,0          0,1,1 -3268.7052
-201         x       5,2,0          0,1,1 -3268.7052
-202    fitted       5,2,0          0,1,1 -3268.7052
-203      coef       5,2,0          0,1,1 -2972.8735
-204    sigma2       5,2,0          0,1,1 -2972.8735
-205  var.coef       5,2,0          0,1,1 -2972.8735
-206      mask       5,2,0          0,1,1 -2972.8735
-207    loglik       5,2,0          0,1,1 -2972.8735
-208       aic       5,2,0          0,1,1 -2972.8735
-209      arma       5,2,0          0,1,1 -2972.8735
-210 residuals       5,2,0          0,1,1 -2972.8735
-211      call       5,2,0          0,1,1 -2972.8735
-212    series       5,2,0          0,1,1 -2972.8735
-213      code       5,2,0          0,1,1 -2972.8735
-214    n.cond       5,2,0          0,1,1 -2972.8735
-215      nobs       5,2,0          0,1,1 -2972.8735
-216     model       5,2,0          0,1,1 -2972.8735
-217      xreg       5,2,0          0,1,1 -2972.8735
-218       bic       5,2,0          0,1,1 -2972.8735
-219      aicc       5,2,0          0,1,1 -2972.8735
-220         x       5,2,0          0,1,1 -2972.8735
-221    fitted       5,2,0          0,1,1 -2972.8735
-222      coef       5,1,0          0,1,1  -145.8141
-223    sigma2       5,1,0          0,1,1  -145.8141
-224  var.coef       5,1,0          0,1,1  -145.8141
-225      mask       5,1,0          0,1,1  -145.8141
-226    loglik       5,1,0          0,1,1  -145.8141
-227       aic       5,1,0          0,1,1  -145.8141
-228      arma       5,1,0          0,1,1  -145.8141
-229 residuals       5,1,0          0,1,1  -145.8141
-230      call       5,1,0          0,1,1  -145.8141
-231    series       5,1,0          0,1,1  -145.8141
-232      code       5,1,0          0,1,1  -145.8141
-233    n.cond       5,1,0          0,1,1  -145.8141
-234      nobs       5,1,0          0,1,1  -145.8141
-235     model       5,1,0          0,1,1  -145.8141
-236      xreg       5,1,0          0,1,1  -145.8141
-237       bic       5,1,0          0,1,1  -145.8141
-238      aicc       5,1,0          0,1,1  -145.8141
-239         x       5,1,0          0,1,1  -145.8141
-240    fitted       5,1,0          0,1,1  -145.8141</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a nicer table view</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(model_details_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through each model in the list, retrieve order, and add to the data frame</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (model_name <span class="cf">in</span> <span class="fu">names</span>(model_list)) {</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  order <span class="ot">&lt;-</span> <span class="fu">arimaorder</span>(model_list[[model_name]])</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  model_orders <span class="ot">&lt;-</span> <span class="fu">rbind</span>(model_orders, <span class="fu">data.frame</span>(<span class="at">Model=</span>model_name, <span class="at">AR=</span>order[<span class="dv">1</span>], <span class="at">I=</span>order[<span class="dv">2</span>], <span class="at">MA=</span>order[<span class="dv">3</span>]))</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Load knitr for nicer table formatting</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the table using kable</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(model_orders, <span class="at">caption =</span> <span class="st">"ARIMA Orders of Energy Production Models"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
+<caption>ARIMA Orders of Energy Production Models</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Model</th>
-<th style="text-align: left;">ARIMA_Order</th>
-<th style="text-align: left;">Seasonal_Order</th>
-<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">AR</th>
+<th style="text-align: right;">I</th>
+<th style="text-align: right;">MA</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Coal_Production</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Natural_Gas_Dry_Production</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Crude_Oil_Production</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Natural_Gas_Plant_Liquids_Production</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Total_Fossil_Fuels_Production</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Nuclear_Electric_Power_Production</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Hydroelectric_Power_Production</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Geothermal_Energy_Production</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Solar_Energy_Production</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Wind_Energy_Production</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Biomass_Energy_Production</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
+<td style="text-align: left;">Total_Renewable_Energy_Production</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-847.2336</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">0,4,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1379.1977</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">2,1,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-1716.3481</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,2</td>
-<td style="text-align: right;">-3444.2345</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-268.7747</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">xreg</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">1,5,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2334.2824</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">1,3,0</td>
-<td style="text-align: left;">0,1,0</td>
-<td style="text-align: right;">-4103.2290</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">xreg</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">3,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-7928.4043</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">xreg</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">3,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-6274.7066</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">0,0,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-4573.2080</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">xreg</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-3268.7052</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">xreg</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">5,2,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-2972.8735</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">coef</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">sigma2</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">var.coef</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">mask</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">loglik</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aic</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">arma</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">residuals</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">call</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">series</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">code</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">n.cond</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">nobs</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">model</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">xreg</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bic</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">aicc</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">fitted</td>
-<td style="text-align: left;">5,1,0</td>
-<td style="text-align: left;">0,1,1</td>
-<td style="text-align: right;">-145.8141</td>
+<td style="text-align: left;">Total_Primary_Energy_Production</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
 </tr>
 </tbody>
 </table>
@@ -2043,10 +475,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2056,8 +505,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2069,7 +527,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2113,6 +694,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2138,6 +720,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -2198,6 +806,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

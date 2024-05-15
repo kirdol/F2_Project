@@ -6,6 +6,8 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Cleaning
+
 ```{r}
 data <- read.csv(here("data", "data_export_20240424.csv"), sep = ";")
 ```
@@ -94,6 +96,127 @@ temperature <- temperature %>%
   select(-Year, -Month)
 ```
 
+# Plots
+
+```{r}
+## Coal
+
+coal <- ggplot() + 
+  # Plot Coal Production
+  geom_line(data = data, aes(x = Month, y = Coal_Production, color = "Production")) + 
+  # Plot Coal Consumption
+  geom_line(data = consumptiondata, aes(x = Month, y = Coal_Consumption, color = "Consumption")) + 
+  # Customize the plot
+  labs(title = "Coal Production and Consumption", x = "Date", y = "Value") + 
+  scale_color_manual(values = c("Production" = "blue", "Consumption" = "red"), name = "Type") +
+  theme_minimal()
+
+## Total Fossil Fuels Production
+
+fossil_fuels <- ggplot() + 
+  # Plot Total Fossil Fuels Production
+  geom_line(data = data, aes(x = Month, y = Total_Fossil_Fuels_Production, color = "Production")) + 
+  # Plot Total Fossil Fuels Consumption
+  geom_line(data = consumptiondata, aes(x = Month, y = Total_Fossil_Fuels_Consumption, color = "Consumption")) + 
+  # Customize the plot
+  labs(title = "Total Fossil Fuels Production and Consumption", x = "Date", y = "Value") + 
+  scale_color_manual(values = c("Production" = "blue", "Consumption" = "red"), name = "Type") +
+  theme_minimal()
+
+## Nuclear Electric Power
+
+nuclear_electric <- ggplot() + 
+  # Plot Nuclear Electric Power Production
+  geom_line(data = data, aes(x = Month, y = Nuclear_Electric_Power_Production, color = "Production")) + 
+  # Plot Nuclear Electric Power Consumption
+  geom_line(data = consumptiondata, aes(x = Month, y = Nuclear_Electric_Power_Consumption, color = "Consumption")) + 
+  # Customize the plot
+  labs(title = "Nuclear Electric Power Production and Consumption", x = "Date", y = "Value") + 
+  scale_color_manual(values = c("Production" = "blue", "Consumption" = "red"), name = "Type") +
+  theme_minimal()
+
+## Hydroelectric Power
+
+hydroelectric <- ggplot() + 
+  # Plot Hydroelectric Power Production
+  geom_line(data = data, aes(x = Month, y = Hydroelectric_Power_Production, color = "Production")) + 
+  # Plot Hydroelectric Power Consumption
+  geom_line(data = consumptiondata, aes(x = Month, y = Hydroelectric_Power_Consumption, color = "Consumption")) + 
+  # Customize the plot
+  labs(title = "Hydroelectric Power Production and Consumption", x = "Date", y = "Value") + 
+  scale_color_manual(values = c("Production" = "blue", "Consumption" = "red"), name = "Type") +
+  theme_minimal()
+
+## Solar Energy
+
+solar <- ggplot() + 
+  # Plot Solar Energy Production
+  geom_line(data = data, aes(x = Month, y = Solar_Energy_Production, color = "Production")) + 
+  # Plot Solar Energy Consumption
+  geom_line(data = consumptiondata, aes(x = Month, y = Solar_Energy_Consumption, color = "Consumption")) + 
+  # Customize the plot
+  labs(title = "Solar Energy Production and Consumption", x = "Date", y = "Value") + 
+  scale_color_manual(values = c("Production" = "blue", "Consumption" = "red"), name = "Type") +
+  theme_minimal()
+
+## Biomass Energy
+
+biomass <- ggplot() + 
+  # Plot Biomass Energy Production
+  geom_line(data = data, aes(x = Month, y = Biomass_Energy_Production, color = "Production")) + 
+  # Plot Biomass Energy Consumption
+  geom_line(data = consumptiondata, aes(x = Month, y = Biomass_Energy_Consumption, color = "Consumption")) + 
+  # Customize the plot
+  labs(title = "Biomass Energy Production and Consumption", x = "Date", y = "Value") + 
+  scale_color_manual(values = c("Production" = "blue", "Consumption" = "red"), name = "Type") +
+  theme_minimal()
+
+## Total Renewable Energy
+
+renewable <- ggplot() + 
+  # Plot Total Renewable Energy Production
+  geom_line(data = data, aes(x = Month, y = Total_Renewable_Energy_Production, color = "Production")) + 
+  # Plot Total Renewable Energy Consumption
+  geom_line(data = consumptiondata, aes(x = Month, y = Total_Renewable_Energy_Consumption, color = "Consumption")) + 
+  # Customize the plot
+  labs(title = "Total Renewable Energy Production and Consumption", x = "Date", y = "Value") + 
+  scale_color_manual(values = c("Production" = "blue", "Consumption" = "red"), name = "Type") +
+  theme_minimal()
+
+## Total Primary Energy
+
+primary <- ggplot() + 
+  # Plot Total Primary Energy Production
+  geom_line(data = data, aes(x = Month, y = Total_Primary_Energy_Production, color = "Production")) + 
+  # Plot Total Primary Energy Consumption
+  geom_line(data = consumptiondata, aes(x = Month, y = Total_Primary_Energy_Consumption, color = "Consumption")) + 
+  # Customize the plot
+  labs(title = "Total Primary Energy Production and Consumption", x = "Date", y = "Value") + 
+  scale_color_manual(values = c("Production" = "blue", "Consumption" = "red"), name = "Type") +
+  theme_minimal()
+
+# Combine all the plots
+final_plot <- coal + fossil_fuels + nuclear_electric +
+              hydroelectric + solar + biomass +
+              renewable + primary +
+              plot_layout(guides = 'collect') & 
+              theme(legend.position = "bottom")
+
+final_plot
+```
+
+
+
+On pense montrer qqch comme ça, on ajoute temp, on voit que conso plus eélece, donc importe, si trop de prod, tu exportes
+on doit acheter (trop cher elec)
+exporter
+
+
+
+
+
+
+
 ## Plot Data Production
 
 ```{r}
@@ -122,7 +245,7 @@ ggplot(data, aes(x = Month, y = Total_Fossil_Fuels_Production)) +
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
 
-#Nuclear Electric Power Production
+# Nuclear Electric Power Production
 ggplot(data, aes(x = Month, y = Nuclear_Electric_Power_Production)) + 
   geom_line() + 
   labs(title = "Time Series Plot", x = "Date", y = "Value")
@@ -313,4 +436,3 @@ coal_consumption_monthly.ts %>%
 ```
 
 Comparing the STL decomposition of the Coal Production & The Coal Consumption, we clearly observe that the overall curves are similar, both presenting similar trends and seasonality. There seems to be a higher variation in the randomness beginning in the 2010s, but more visible in the 2020s, notably due to Covid-19. This events shows that Covid impacted the American's energy consumption, mainly as they were at home.
-

@@ -103,14 +103,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(as.numeric)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the data frame to a tsibble</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>data_tsibble <span class="ot">&lt;-</span> <span class="fu">as_tsibble</span>(data, <span class="at">index =</span> Month)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the class of the data</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(data, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Month <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(data<span class="sc">$</span>Month, <span class="at">format =</span> <span class="st">"%d.%m.%y"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the data frame to a tsibble</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>data_tsibble <span class="ot">&lt;-</span> <span class="fu">as_tsibble</span>(data, <span class="at">index =</span> Month)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the class of the data</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(data_tsibble, class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                               Month                      Coal_Production 
-                           "numeric"                            "numeric" 
+                              "Date"                            "numeric" 
           Natural_Gas_Dry_Production                 Crude_Oil_Production 
                            "numeric"                            "numeric" 
 Natural_Gas_Plant_Liquids_Production        Total_Fossil_Fuels_Production 
@@ -133,124 +135,366 @@ Natural_Gas_Plant_Liquids_Production        Total_Fossil_Fuels_Production
 <h2 class="anchored" data-anchor-id="arima-model">ARIMA Model</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit ARIMA models for all the type of production</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>arima_model_coal                      <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Coal_Production)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>arima_model_natural_gas_dry           <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Natural_Gas_Dry_Production)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>arima_model_crude_oil                 <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Crude_Oil_Production)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>arima_model_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Natural_Gas_Plant_Liquids_Production)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>arima_model_total_fossil_fuels        <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Fossil_Fuels_Production)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>arima_model_nuclear_electric_power    <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Nuclear_Electric_Power_Production)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>arima_model_hydroelectric_power       <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Hydroelectric_Power_Production)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>arima_model_geothermal_energy         <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Geothermal_Energy_Production)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>arima_model_solar_energy              <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Solar_Energy_Production)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>arima_model_wind_energy               <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Wind_Energy_Production)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>arima_model_biomass_energy            <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Biomass_Energy_Production)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>arima_model_total_renewable_energy    <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Renewable_Energy_Production)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>arima_model_total_primary_energy      <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_tsibble<span class="sc">$</span>Total_Primary_Energy_Production)</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Forecast using the ARIMA model</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>forecast_result_coal                      <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_coal, <span class="at">h =</span> period)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>forecast_result_natural_gas_dry           <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_natural_gas_dry, <span class="at">h =</span> period)</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>forecast_result_crude_oil                 <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_crude_oil, <span class="at">h =</span> period)</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>forecast_result_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_natural_gas_plant_liquids, <span class="at">h =</span> period)</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>forecast_result_total_fossil_fuels        <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_fossil_fuels, <span class="at">h =</span> period)</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>forecast_result_nuclear_electric_power    <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_nuclear_electric_power, <span class="at">h =</span> period)</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>forecast_result_hydroelectric_power       <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_hydroelectric_power, <span class="at">h =</span> period)</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>forecast_result_geothermal_energy         <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_geothermal_energy, <span class="at">h =</span> period)</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>forecast_result_solar_energy              <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_solar_energy, <span class="at">h =</span> period)</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>forecast_result_wind_energy               <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_wind_energy, <span class="at">h =</span> period)</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>forecast_result_biomass_energy            <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_biomass_energy, <span class="at">h =</span> period)</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>forecast_result_total_renewable_energy    <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_renewable_energy, <span class="at">h =</span> period)</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>forecast_result_total_primary_energy      <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_primary_energy, <span class="at">h =</span> period)</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the forecasts</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Coal</span></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>p_coal <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_coal) <span class="sc">+</span></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Coal Production"</span>,</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Coal Production"</span>,</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data_ts_coal <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Coal_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>arima_model_coal                      <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_coal)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>data_ts_natural_gas_dry <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Natural_Gas_Dry_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>arima_model_natural_gas_dry           <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_natural_gas_dry)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>data_ts_crude_oil <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Crude_Oil_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>arima_model_crude_oil                 <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_crude_oil)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>data_ts_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Natural_Gas_Plant_Liquids_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>arima_model_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_natural_gas_plant_liquids)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>data_ts_total_fossil_fuels <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Total_Fossil_Fuels_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>arima_model_total_fossil_fuels        <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_total_fossil_fuels)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>data_ts_nuclear_electric_power <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Nuclear_Electric_Power_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>arima_model_nuclear_electric_power    <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_nuclear_electric_power)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>data_ts_hydroelectric_power <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Hydroelectric_Power_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>arima_model_hydroelectric_power       <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_hydroelectric_power)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>data_ts_geothermal_energy <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Geothermal_Energy_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>arima_model_geothermal_energy         <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_geothermal_energy)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>data_ts_solar_energy <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Solar_Energy_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>arima_model_solar_energy <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_solar_energy)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>data_ts_wind_energy <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Wind_Energy_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>arima_model_wind_energy               <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_wind_energy)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>data_ts_biomass_energy <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Biomass_Energy_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>arima_model_biomass_energy            <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_biomass_energy)</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>data_ts_total_renewable_energy <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Total_Renewable_Energy_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>arima_model_total_renewable_energy    <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_total_renewable_energy)</span>
 <span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Natural Gas Dry</span></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>p_natural_gas_dry <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_natural_gas_dry) <span class="sc">+</span></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Natural Gas Dry Production"</span>,</span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Natural Gas Dry Production"</span>,</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Crude Oil</span></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>p_crude_oil <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_crude_oil) <span class="sc">+</span></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Crude Oil Production"</span>,</span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Crude Oil Production"</span>,</span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Natural Gas Plant Liquids</span></span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>p_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_natural_gas_plant_liquids) <span class="sc">+</span></span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Natural Gas Plant Liquids Production"</span>,</span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Natural Gas Plant Liquids Production"</span>,</span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Total Fossil Fuels</span></span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>p_total_fossil_fuels <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_fossil_fuels) <span class="sc">+</span></span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Fossil Fuels Production"</span>,</span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Fossil Fuels Production"</span>,</span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Nuclear Electric Power</span></span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>p_nuclear_electric_power <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_nuclear_electric_power) <span class="sc">+</span></span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Nuclear Electric Power Production"</span>,</span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Nuclear Electric Power Production"</span>,</span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Hydroelectric Power</span></span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>p_hydroelectric_power <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_hydroelectric_power) <span class="sc">+</span></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Hydroelectric Power Production"</span>,</span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Hydroelectric Power Production"</span>,</span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Geothermal Energy</span></span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>p_geothermal_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_geothermal_energy) <span class="sc">+</span></span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Geothermal Energy Production"</span>,</span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Geothermal Energy Production"</span>,</span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Solar Energy</span></span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>p_solar_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_solar_energy) <span class="sc">+</span></span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Solar Energy Production"</span>,</span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Solar Energy Production"</span>,</span>
-<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a><span class="co"># Wind Energy</span></span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>p_wind_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_wind_energy) <span class="sc">+</span></span>
-<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Wind Energy Production"</span>,</span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Wind Energy Production"</span>,</span>
-<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Biomass Energy</span></span>
-<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>p_biomass_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_biomass_energy) <span class="sc">+</span></span>
-<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Biomass Energy Production"</span>,</span>
-<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Biomass Energy Production"</span>,</span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a><span class="co"># Total Renewable Energy</span></span>
-<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>p_total_renewable_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_renewable_energy) <span class="sc">+</span></span>
-<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Renewable Energy Production"</span>,</span>
-<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Renewable Energy Production"</span>,</span>
-<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a><span class="co"># Total Primary Energy</span></span>
-<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>p_total_primary_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_primary_energy) <span class="sc">+</span></span>
-<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Primary Energy Production"</span>,</span>
-<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Primary Energy Production"</span>,</span>
-<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
-<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine all the plots</span></span>
-<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>final_plot <span class="ot">&lt;-</span> p_coal <span class="sc">+</span> p_natural_gas_dry <span class="sc">+</span> p_crude_oil <span class="sc">+</span> p_natural_gas_plant_liquids <span class="sc">+</span></span>
-<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>              p_total_fossil_fuels <span class="sc">+</span> p_nuclear_electric_power <span class="sc">+</span> p_hydroelectric_power <span class="sc">+</span></span>
-<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>              p_geothermal_energy <span class="sc">+</span> p_solar_energy <span class="sc">+</span> p_wind_energy <span class="sc">+</span> p_biomass_energy <span class="sc">+</span></span>
-<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>              p_total_renewable_energy <span class="sc">+</span> p_total_primary_energy <span class="sc">+</span></span>
-<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>              <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">'collect'</span>) <span class="sc">&amp;</span> </span>
-<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>              <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
-<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(final_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>data_ts_total_primary_energy <span class="ot">&lt;-</span> <span class="fu">ts</span>(data_tsibble<span class="sc">$</span>Total_Primary_Energy_Production, <span class="at">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>arima_model_total_primary_energy      <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(data_ts_total_primary_energy)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Manually extract ARIMA orders and seasonal components</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>get_arima_components <span class="ot">&lt;-</span> <span class="cf">function</span>(model) {</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> model<span class="sc">$</span>arma[<span class="dv">1</span>],</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">d =</span> model<span class="sc">$</span>arma[<span class="dv">6</span>],</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">q =</span> model<span class="sc">$</span>arma[<span class="dv">2</span>],</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">P =</span> model<span class="sc">$</span>arma[<span class="dv">3</span>],</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">D =</span> model<span class="sc">$</span>arma[<span class="dv">7</span>],</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">Q =</span> model<span class="sc">$</span>arma[<span class="dv">4</span>],</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> model<span class="sc">$</span>arma[<span class="dv">5</span>]</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>coal_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_coal)</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>natural_gas_dry_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_natural_gas_dry)</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>crude_oil_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_crude_oil)</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>natural_gas_plant_liquids_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_natural_gas_plant_liquids)</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>total_fossil_fuels_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_total_fossil_fuels)</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>nuclear_electric_power_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_nuclear_electric_power)</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>hydroelectric_power_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_hydroelectric_power)</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>geothermal_energy_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_geothermal_energy)</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>solar_energy_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_solar_energy)</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>wind_energy_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_wind_energy)</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>biomass_energy_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_biomass_energy)</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>total_renewable_energy_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_total_renewable_energy)</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>total_primary_energy_order <span class="ot">&lt;-</span> <span class="fu">get_arima_components</span>(arima_model_total_primary_energy)</span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a summary table</span></span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">c</span>(</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Coal"</span>, <span class="st">"Natural Gas Dry"</span>, <span class="st">"Crude Oil"</span>, <span class="st">"Natural Gas Plant Liquids"</span>,</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Total Fossil Fuels"</span>, <span class="st">"Nuclear Electric Power"</span>, <span class="st">"Hydroelectric Power"</span>,</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Geothermal Energy"</span>, <span class="st">"Solar Energy"</span>, <span class="st">"Wind Energy"</span>, <span class="st">"Biomass Energy"</span>,</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Total Renewable Energy"</span>, <span class="st">"Total Primary Energy"</span></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> <span class="fu">c</span>(coal_order<span class="sc">$</span>p, natural_gas_dry_order<span class="sc">$</span>p, crude_oil_order<span class="sc">$</span>p, natural_gas_plant_liquids_order<span class="sc">$</span>p,</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>        total_fossil_fuels_order<span class="sc">$</span>p, nuclear_electric_power_order<span class="sc">$</span>p, hydroelectric_power_order<span class="sc">$</span>p,</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>        geothermal_energy_order<span class="sc">$</span>p, solar_energy_order<span class="sc">$</span>p, wind_energy_order<span class="sc">$</span>p, biomass_energy_order<span class="sc">$</span>p,</span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>        total_renewable_energy_order<span class="sc">$</span>p, total_primary_energy_order<span class="sc">$</span>p),</span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> <span class="fu">c</span>(coal_order<span class="sc">$</span>d, natural_gas_dry_order<span class="sc">$</span>d, crude_oil_order<span class="sc">$</span>d, natural_gas_plant_liquids_order<span class="sc">$</span>d,</span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>        total_fossil_fuels_order<span class="sc">$</span>d, nuclear_electric_power_order<span class="sc">$</span>d, hydroelectric_power_order<span class="sc">$</span>d,</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>        geothermal_energy_order<span class="sc">$</span>d, solar_energy_order<span class="sc">$</span>d, wind_energy_order<span class="sc">$</span>d, biomass_energy_order<span class="sc">$</span>d,</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>        total_renewable_energy_order<span class="sc">$</span>d, total_primary_energy_order<span class="sc">$</span>d),</span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="fu">c</span>(coal_order<span class="sc">$</span>q, natural_gas_dry_order<span class="sc">$</span>q, crude_oil_order<span class="sc">$</span>q, natural_gas_plant_liquids_order<span class="sc">$</span>q,</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>        total_fossil_fuels_order<span class="sc">$</span>q, nuclear_electric_power_order<span class="sc">$</span>q, hydroelectric_power_order<span class="sc">$</span>q,</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>        geothermal_energy_order<span class="sc">$</span>q, solar_energy_order<span class="sc">$</span>q, wind_energy_order<span class="sc">$</span>q, biomass_energy_order<span class="sc">$</span>q,</span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>        total_renewable_energy_order<span class="sc">$</span>q, total_primary_energy_order<span class="sc">$</span>q),</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>  <span class="at">P =</span> <span class="fu">c</span>(coal_order<span class="sc">$</span>P, natural_gas_dry_order<span class="sc">$</span>P, crude_oil_order<span class="sc">$</span>P, natural_gas_plant_liquids_order<span class="sc">$</span>P,</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>        total_fossil_fuels_order<span class="sc">$</span>P, nuclear_electric_power_order<span class="sc">$</span>P, hydroelectric_power_order<span class="sc">$</span>P,</span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>        geothermal_energy_order<span class="sc">$</span>P, solar_energy_order<span class="sc">$</span>P, wind_energy_order<span class="sc">$</span>P, biomass_energy_order<span class="sc">$</span>P,</span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>        total_renewable_energy_order<span class="sc">$</span>P, total_primary_energy_order<span class="sc">$</span>P),</span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>  <span class="at">D =</span> <span class="fu">c</span>(coal_order<span class="sc">$</span>D, natural_gas_dry_order<span class="sc">$</span>D, crude_oil_order<span class="sc">$</span>D, natural_gas_plant_liquids_order<span class="sc">$</span>D,</span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>        total_fossil_fuels_order<span class="sc">$</span>D, nuclear_electric_power_order<span class="sc">$</span>D, hydroelectric_power_order<span class="sc">$</span>D,</span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>        geothermal_energy_order<span class="sc">$</span>D, solar_energy_order<span class="sc">$</span>D, wind_energy_order<span class="sc">$</span>D, biomass_energy_order<span class="sc">$</span>D,</span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>        total_renewable_energy_order<span class="sc">$</span>D, total_primary_energy_order<span class="sc">$</span>D),</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">Q =</span> <span class="fu">c</span>(coal_order<span class="sc">$</span>Q, natural_gas_dry_order<span class="sc">$</span>Q, crude_oil_order<span class="sc">$</span>Q, natural_gas_plant_liquids_order<span class="sc">$</span>Q,</span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>        total_fossil_fuels_order<span class="sc">$</span>Q, nuclear_electric_power_order<span class="sc">$</span>Q, hydroelectric_power_order<span class="sc">$</span>Q,</span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>        geothermal_energy_order<span class="sc">$</span>Q, solar_energy_order<span class="sc">$</span>Q, wind_energy_order<span class="sc">$</span>Q, biomass_energy_order<span class="sc">$</span>Q,</span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>        total_renewable_energy_order<span class="sc">$</span>Q, total_primary_energy_order<span class="sc">$</span>Q),</span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>  <span class="at">s =</span> <span class="fu">c</span>(coal_order<span class="sc">$</span>s, natural_gas_dry_order<span class="sc">$</span>s, crude_oil_order<span class="sc">$</span>s, natural_gas_plant_liquids_order<span class="sc">$</span>s,</span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>        total_fossil_fuels_order<span class="sc">$</span>s, nuclear_electric_power_order<span class="sc">$</span>s, hydroelectric_power_order<span class="sc">$</span>s,</span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>        geothermal_energy_order<span class="sc">$</span>s, solar_energy_order<span class="sc">$</span>s, wind_energy_order<span class="sc">$</span>s, biomass_energy_order<span class="sc">$</span>s,</span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>        total_renewable_energy_order<span class="sc">$</span>s, total_primary_energy_order<span class="sc">$</span>s)</span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the summary table using kable</span></span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(summary_table, <span class="at">format =</span> <span class="st">"markdown"</span>, <span class="at">caption =</span> <span class="st">"Summary of ARIMA Model Orders"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Summary of ARIMA Model Orders</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">p</th>
+<th style="text-align: right;">d</th>
+<th style="text-align: right;">q</th>
+<th style="text-align: right;">P</th>
+<th style="text-align: right;">D</th>
+<th style="text-align: right;">Q</th>
+<th style="text-align: right;">s</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Coal</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Natural Gas Dry</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Crude Oil</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Natural Gas Plant Liquids</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total Fossil Fuels</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Nuclear Electric Power</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hydroelectric Power</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Geothermal Energy</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Solar Energy</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wind Energy</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Biomass Energy</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Total Renewable Energy</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total Primary Energy</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Forecast using the ARIMA model</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>forecast_result_coal                      <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_coal, <span class="at">h =</span> period)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>forecast_result_natural_gas_dry           <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_natural_gas_dry, <span class="at">h =</span> period)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>forecast_result_crude_oil                 <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_crude_oil, <span class="at">h =</span> period)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>forecast_result_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_natural_gas_plant_liquids, <span class="at">h =</span> period)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>forecast_result_total_fossil_fuels        <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_fossil_fuels, <span class="at">h =</span> period)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>forecast_result_nuclear_electric_power    <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_nuclear_electric_power, <span class="at">h =</span> period)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>forecast_result_hydroelectric_power       <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_hydroelectric_power, <span class="at">h =</span> period)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>forecast_result_geothermal_energy         <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_geothermal_energy, <span class="at">h =</span> period)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>forecast_result_solar_energy              <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_solar_energy, <span class="at">h =</span> period)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>forecast_result_wind_energy               <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_wind_energy, <span class="at">h =</span> period)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>forecast_result_biomass_energy            <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_biomass_energy, <span class="at">h =</span> period)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>forecast_result_total_renewable_energy    <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_renewable_energy, <span class="at">h =</span> period)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>forecast_result_total_primary_energy      <span class="ot">&lt;-</span> <span class="fu">forecast</span>(arima_model_total_primary_energy, <span class="at">h =</span> period)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the forecasts</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Coal</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>p_coal <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_coal) <span class="sc">+</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Coal Production"</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Coal Production"</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Natural Gas Dry</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>p_natural_gas_dry <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_natural_gas_dry) <span class="sc">+</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Natural Gas Dry Production"</span>,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Natural Gas Dry Production"</span>,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Crude Oil</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>p_crude_oil <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_crude_oil) <span class="sc">+</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Crude Oil Production"</span>,</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Crude Oil Production"</span>,</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Natural Gas Plant Liquids</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>p_natural_gas_plant_liquids <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_natural_gas_plant_liquids) <span class="sc">+</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Natural Gas Plant Liquids Production"</span>,</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Natural Gas Plant Liquids Production"</span>,</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Total Fossil Fuels</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>p_total_fossil_fuels <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_fossil_fuels) <span class="sc">+</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Fossil Fuels Production"</span>,</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Fossil Fuels Production"</span>,</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Nuclear Electric Power</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>p_nuclear_electric_power <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_nuclear_electric_power) <span class="sc">+</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Nuclear Electric Power Production"</span>,</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Nuclear Electric Power Production"</span>,</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Hydroelectric Power</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>p_hydroelectric_power <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_hydroelectric_power) <span class="sc">+</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Hydroelectric Power Production"</span>,</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Hydroelectric Power Production"</span>,</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Geothermal Energy</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>p_geothermal_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_geothermal_energy) <span class="sc">+</span></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Geothermal Energy Production"</span>,</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Geothermal Energy Production"</span>,</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Solar Energy</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>p_solar_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_solar_energy) <span class="sc">+</span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Solar Energy Production"</span>,</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Solar Energy Production"</span>,</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Wind Energy</span></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>p_wind_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_wind_energy) <span class="sc">+</span></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Wind Energy Production"</span>,</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Wind Energy Production"</span>,</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a><span class="co"># Biomass Energy</span></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>p_biomass_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_biomass_energy) <span class="sc">+</span></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Biomass Energy Production"</span>,</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Biomass Energy Production"</span>,</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a><span class="co"># Total Renewable Energy</span></span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>p_total_renewable_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_renewable_energy) <span class="sc">+</span></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Renewable Energy Production"</span>,</span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Renewable Energy Production"</span>,</span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a><span class="co"># Total Primary Energy</span></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>p_total_primary_energy <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(forecast_result_total_primary_energy) <span class="sc">+</span></span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ARIMA Forecast of Total Primary Energy Production"</span>,</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Primary Energy Production"</span>,</span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Time"</span>)</span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine all the plots</span></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>final_plot <span class="ot">&lt;-</span> p_coal <span class="sc">+</span> p_natural_gas_dry <span class="sc">+</span> p_crude_oil <span class="sc">+</span> p_natural_gas_plant_liquids <span class="sc">+</span></span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>              p_total_fossil_fuels <span class="sc">+</span> p_nuclear_electric_power <span class="sc">+</span> p_hydroelectric_power <span class="sc">+</span></span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>              p_geothermal_energy <span class="sc">+</span> p_solar_energy <span class="sc">+</span> p_wind_energy <span class="sc">+</span> p_biomass_energy <span class="sc">+</span></span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>              p_total_renewable_energy <span class="sc">+</span> p_total_primary_energy <span class="sc">+</span></span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>              <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">'collect'</span>) <span class="sc">&amp;</span> </span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>              <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(final_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -258,138 +502,21 @@ Natural_Gas_Plant_Liquids_Production        Total_Fossil_Fuels_Production
 </figure>
 </div>
 </div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Store all models in a list</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Coal_Production =</span> arima_model_coal,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Natural_Gas_Dry_Production =</span> arima_model_natural_gas_dry,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Crude_Oil_Production =</span> arima_model_crude_oil,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Natural_Gas_Plant_Liquids_Production =</span> arima_model_natural_gas_plant_liquids,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Total_Fossil_Fuels_Production =</span> arima_model_total_fossil_fuels,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Nuclear_Electric_Power_Production =</span> arima_model_nuclear_electric_power,</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Hydroelectric_Power_Production =</span> arima_model_hydroelectric_power,</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Geothermal_Energy_Production =</span> arima_model_geothermal_energy,</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Solar_Energy_Production =</span> arima_model_solar_energy,</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Wind_Energy_Production =</span> arima_model_wind_energy,</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Biomass_Energy_Production =</span> arima_model_biomass_energy,</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Total_Renewable_Energy_Production =</span> arima_model_total_renewable_energy,</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">Total_Primary_Energy_Production =</span> arima_model_total_primary_energy</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize an empty data frame to store the results</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>model_orders <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">character</span>(<span class="dv">0</span>),</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">AR =</span> <span class="fu">integer</span>(<span class="dv">0</span>),</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">I =</span> <span class="fu">integer</span>(<span class="dv">0</span>),</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">MA =</span> <span class="fu">integer</span>(<span class="dv">0</span>),</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>  <span class="co"># Set stringsAsFactors to FALSE to keep character strings</span></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through each model in the list, retrieve order, and add to the data frame</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (model_name <span class="cf">in</span> <span class="fu">names</span>(model_list)) {</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  order <span class="ot">&lt;-</span> <span class="fu">arimaorder</span>(model_list[[model_name]])</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  model_orders <span class="ot">&lt;-</span> <span class="fu">rbind</span>(model_orders, <span class="fu">data.frame</span>(<span class="at">Model=</span>model_name, <span class="at">AR=</span>order[<span class="dv">1</span>], <span class="at">I=</span>order[<span class="dv">2</span>], <span class="at">MA=</span>order[<span class="dv">3</span>]))</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Load knitr for nicer table formatting</span></span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the table using kable</span></span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(model_orders, <span class="at">caption =</span> <span class="st">"ARIMA Orders of Energy Production Models"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p_solar_energy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
-<caption>ARIMA Orders of Energy Production Models</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Model</th>
-<th style="text-align: right;">AR</th>
-<th style="text-align: right;">I</th>
-<th style="text-align: right;">MA</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Coal_Production</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">2</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Natural_Gas_Dry_Production</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Crude_Oil_Production</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Natural_Gas_Plant_Liquids_Production</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Total_Fossil_Fuels_Production</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Nuclear_Electric_Power_Production</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">5</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Hydroelectric_Power_Production</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Geothermal_Energy_Production</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Solar_Energy_Production</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Wind_Energy_Production</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Biomass_Energy_Production</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">2</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Total_Renewable_Energy_Production</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Total_Primary_Energy_Production</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-</tr>
-</tbody>
-</table>
+<div>
+<figure class="figure">
+<p><img src="ARIMA_files/figure-html/ARIMA%20Model%20and%20plots-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p_coal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ARIMA_files/figure-html/ARIMA%20Model%20and%20plots-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>

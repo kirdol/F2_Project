@@ -35,19 +35,114 @@ period <- 24
 ## ARIMA Model
 ```{r ARIMA Model and plots}
 # Fit ARIMA models for all the type of production
-arima_model_coal                      <- auto.arima(data_tsibble$Coal_Production)
-arima_model_natural_gas_dry           <- auto.arima(data_tsibble$Natural_Gas_Dry_Production)
-arima_model_crude_oil                 <- auto.arima(data_tsibble$Crude_Oil_Production)
-arima_model_natural_gas_plant_liquids <- auto.arima(data_tsibble$Natural_Gas_Plant_Liquids_Production)
-arima_model_total_fossil_fuels        <- auto.arima(data_tsibble$Total_Fossil_Fuels_Production)
-arima_model_nuclear_electric_power    <- auto.arima(data_tsibble$Nuclear_Electric_Power_Production)
-arima_model_hydroelectric_power       <- auto.arima(data_tsibble$Hydroelectric_Power_Production)
-arima_model_geothermal_energy         <- auto.arima(data_tsibble$Geothermal_Energy_Production)
-arima_model_solar_energy              <- auto.arima(data_tsibble$Solar_Energy_Production)
-arima_model_wind_energy               <- auto.arima(data_tsibble$Wind_Energy_Production)
-arima_model_biomass_energy            <- auto.arima(data_tsibble$Biomass_Energy_Production)
-arima_model_total_renewable_energy    <- auto.arima(data_tsibble$Total_Renewable_Energy_Production)
-arima_model_total_primary_energy      <- auto.arima(data_tsibble$Total_Primary_Energy_Production)
+data_ts_coal <- ts(data_tsibble$Coal_Production, frequency = 12)
+arima_model_coal                      <- auto.arima(data_ts_coal)
+
+data_ts_natural_gas_dry <- ts(data_tsibble$Natural_Gas_Dry_Production, frequency = 12)
+arima_model_natural_gas_dry           <- auto.arima(data_ts_natural_gas_dry)
+
+data_ts_crude_oil <- ts(data_tsibble$Crude_Oil_Production, frequency = 12)
+arima_model_crude_oil                 <- auto.arima(data_ts_crude_oil)
+
+data_ts_natural_gas_plant_liquids <- ts(data_tsibble$Natural_Gas_Plant_Liquids_Production, frequency = 12)
+arima_model_natural_gas_plant_liquids <- auto.arima(data_ts_natural_gas_plant_liquids)
+
+data_ts_total_fossil_fuels <- ts(data_tsibble$Total_Fossil_Fuels_Production, frequency = 12)
+arima_model_total_fossil_fuels        <- auto.arima(data_ts_total_fossil_fuels)
+
+data_ts_nuclear_electric_power <- ts(data_tsibble$Nuclear_Electric_Power_Production, frequency = 12)
+arima_model_nuclear_electric_power    <- auto.arima(data_ts_nuclear_electric_power)
+
+data_ts_hydroelectric_power <- ts(data_tsibble$Hydroelectric_Power_Production, frequency = 12)
+arima_model_hydroelectric_power       <- auto.arima(data_ts_hydroelectric_power)
+
+data_ts_geothermal_energy <- ts(data_tsibble$Geothermal_Energy_Production, frequency = 12)
+arima_model_geothermal_energy         <- auto.arima(data_ts_geothermal_energy)
+
+data_ts_solar_energy <- ts(data_tsibble$Solar_Energy_Production, frequency = 12)
+arima_model_solar_energy <- auto.arima(data_ts_solar_energy)
+
+data_ts_wind_energy <- ts(data_tsibble$Wind_Energy_Production, frequency = 12)
+arima_model_wind_energy               <- auto.arima(data_ts_wind_energy)
+
+data_ts_biomass_energy <- ts(data_tsibble$Biomass_Energy_Production, frequency = 12)
+arima_model_biomass_energy            <- auto.arima(data_ts_biomass_energy)
+
+data_ts_total_renewable_energy <- ts(data_tsibble$Total_Renewable_Energy_Production, frequency = 12)
+arima_model_total_renewable_energy    <- auto.arima(data_ts_total_renewable_energy)
+
+data_ts_total_primary_energy <- ts(data_tsibble$Total_Primary_Energy_Production, frequency = 12)
+arima_model_total_primary_energy      <- auto.arima(data_ts_total_primary_energy)
+
+
+# Manually extract ARIMA orders and seasonal components
+get_arima_components <- function(model) {
+  list(
+    p = model$arma[1],
+    d = model$arma[6],
+    q = model$arma[2],
+    P = model$arma[3],
+    D = model$arma[7],
+    Q = model$arma[4],
+    s = model$arma[5]
+  )
+}
+
+coal_order <- get_arima_components(arima_model_coal)
+natural_gas_dry_order <- get_arima_components(arima_model_natural_gas_dry)
+crude_oil_order <- get_arima_components(arima_model_crude_oil)
+natural_gas_plant_liquids_order <- get_arima_components(arima_model_natural_gas_plant_liquids)
+total_fossil_fuels_order <- get_arima_components(arima_model_total_fossil_fuels)
+nuclear_electric_power_order <- get_arima_components(arima_model_nuclear_electric_power)
+hydroelectric_power_order <- get_arima_components(arima_model_hydroelectric_power)
+geothermal_energy_order <- get_arima_components(arima_model_geothermal_energy)
+solar_energy_order <- get_arima_components(arima_model_solar_energy)
+wind_energy_order <- get_arima_components(arima_model_wind_energy)
+biomass_energy_order <- get_arima_components(arima_model_biomass_energy)
+total_renewable_energy_order <- get_arima_components(arima_model_total_renewable_energy)
+total_primary_energy_order <- get_arima_components(arima_model_total_primary_energy)
+
+# Create a summary table
+summary_table <- tibble(
+  Model = c(
+    "Coal", "Natural Gas Dry", "Crude Oil", "Natural Gas Plant Liquids",
+    "Total Fossil Fuels", "Nuclear Electric Power", "Hydroelectric Power",
+    "Geothermal Energy", "Solar Energy", "Wind Energy", "Biomass Energy",
+    "Total Renewable Energy", "Total Primary Energy"
+  ),
+  p = c(coal_order$p, natural_gas_dry_order$p, crude_oil_order$p, natural_gas_plant_liquids_order$p,
+        total_fossil_fuels_order$p, nuclear_electric_power_order$p, hydroelectric_power_order$p,
+        geothermal_energy_order$p, solar_energy_order$p, wind_energy_order$p, biomass_energy_order$p,
+        total_renewable_energy_order$p, total_primary_energy_order$p),
+  d = c(coal_order$d, natural_gas_dry_order$d, crude_oil_order$d, natural_gas_plant_liquids_order$d,
+        total_fossil_fuels_order$d, nuclear_electric_power_order$d, hydroelectric_power_order$d,
+        geothermal_energy_order$d, solar_energy_order$d, wind_energy_order$d, biomass_energy_order$d,
+        total_renewable_energy_order$d, total_primary_energy_order$d),
+  q = c(coal_order$q, natural_gas_dry_order$q, crude_oil_order$q, natural_gas_plant_liquids_order$q,
+        total_fossil_fuels_order$q, nuclear_electric_power_order$q, hydroelectric_power_order$q,
+        geothermal_energy_order$q, solar_energy_order$q, wind_energy_order$q, biomass_energy_order$q,
+        total_renewable_energy_order$q, total_primary_energy_order$q),
+  P = c(coal_order$P, natural_gas_dry_order$P, crude_oil_order$P, natural_gas_plant_liquids_order$P,
+        total_fossil_fuels_order$P, nuclear_electric_power_order$P, hydroelectric_power_order$P,
+        geothermal_energy_order$P, solar_energy_order$P, wind_energy_order$P, biomass_energy_order$P,
+        total_renewable_energy_order$P, total_primary_energy_order$P),
+  D = c(coal_order$D, natural_gas_dry_order$D, crude_oil_order$D, natural_gas_plant_liquids_order$D,
+        total_fossil_fuels_order$D, nuclear_electric_power_order$D, hydroelectric_power_order$D,
+        geothermal_energy_order$D, solar_energy_order$D, wind_energy_order$D, biomass_energy_order$D,
+        total_renewable_energy_order$D, total_primary_energy_order$D),
+  Q = c(coal_order$Q, natural_gas_dry_order$Q, crude_oil_order$Q, natural_gas_plant_liquids_order$Q,
+        total_fossil_fuels_order$Q, nuclear_electric_power_order$Q, hydroelectric_power_order$Q,
+        geothermal_energy_order$Q, solar_energy_order$Q, wind_energy_order$Q, biomass_energy_order$Q,
+        total_renewable_energy_order$Q, total_primary_energy_order$Q),
+  s = c(coal_order$s, natural_gas_dry_order$s, crude_oil_order$s, natural_gas_plant_liquids_order$s,
+        total_fossil_fuels_order$s, nuclear_electric_power_order$s, hydroelectric_power_order$s,
+        geothermal_energy_order$s, solar_energy_order$s, wind_energy_order$s, biomass_energy_order$s,
+        total_renewable_energy_order$s, total_primary_energy_order$s)
+)
+
+# Print the summary table using kable
+kable(summary_table, format = "markdown", caption = "Summary of ARIMA Model Orders")
+
 
 # Forecast using the ARIMA model
 forecast_result_coal                      <- forecast(arima_model_coal, h = period)
@@ -153,48 +248,7 @@ final_plot <- p_coal + p_natural_gas_dry + p_crude_oil + p_natural_gas_plant_liq
 
 # Plot
 print(final_plot)
+print(p_solar_energy)
+plot(p_coal)
 ```
-
-
-```{r}
-# Store all models in a list
-model_list <- list(
-  Coal_Production = arima_model_coal,
-  Natural_Gas_Dry_Production = arima_model_natural_gas_dry,
-  Crude_Oil_Production = arima_model_crude_oil,
-  Natural_Gas_Plant_Liquids_Production = arima_model_natural_gas_plant_liquids,
-  Total_Fossil_Fuels_Production = arima_model_total_fossil_fuels,
-  Nuclear_Electric_Power_Production = arima_model_nuclear_electric_power,
-  Hydroelectric_Power_Production = arima_model_hydroelectric_power,
-  Geothermal_Energy_Production = arima_model_geothermal_energy,
-  Solar_Energy_Production = arima_model_solar_energy,
-  Wind_Energy_Production = arima_model_wind_energy,
-  Biomass_Energy_Production = arima_model_biomass_energy,
-  Total_Renewable_Energy_Production = arima_model_total_renewable_energy,
-  Total_Primary_Energy_Production = arima_model_total_primary_energy
-)
-
-# Initialize an empty data frame to store the results
-model_orders <- data.frame(
-  Model = character(0),
-  AR = integer(0),
-  I = integer(0),
-  MA = integer(0),
-  stringsAsFactors = FALSE  # Set stringsAsFactors to FALSE to keep character strings
-)
-
-# Loop through each model in the list, retrieve order, and add to the data frame
-for (model_name in names(model_list)) {
-  order <- arimaorder(model_list[[model_name]])
-  model_orders <- rbind(model_orders, data.frame(Model=model_name, AR=order[1], I=order[2], MA=order[3]))
-}
-
-
-# Load knitr for nicer table formatting
-library(knitr)
-
-# Display the table using kable
-kable(model_orders, caption = "ARIMA Orders of Energy Production Models", row.names = FALSE)
-```
-
 

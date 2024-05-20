@@ -1,4 +1,5 @@
 #import data
+
 data <- read.csv("/Users/stefanfavre/Documents/GitHub/F2_Project2/data/data_export_20240424.csv", sep = ";")
 
 #changing date format
@@ -133,7 +134,6 @@ coal_ets_tuned %>% forecast(h = 12) %>% autoplot(coal_production_monthly.ts)
 coal_ets.fit <- coal_production_monthly.ts %>% 
   model(ETS = ETS(Coal_Production))
 
-
 #Forecast
 coal_ets.fit %>% forecast(h = 12) %>% autoplot(coal_production_monthly.ts)
 
@@ -215,7 +215,7 @@ data_SE_filtered <- data_tsibble %>%
   filter(year(Year_Month) >= 2011)
 
 ggplot(data_SE_filtered, aes(x = Year_Month, y = Solar_Energy_Production)) +   geom_line() +  # Use geom_line() for a time series plot
-  labs(title = "Wind_Energy_Production Over Time Filtered",
+  labs(title = "Solar_Energy_Production Over Time Filtered",
        x = "Month",
        y = "Units") +
   theme_minimal()

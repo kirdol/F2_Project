@@ -96,7 +96,7 @@ temperature <- temperature %>%
   select(-Year, -Month)
 ```
 
-# Plots
+# Plots Production & Consumption
 
 ```{r}
 ## Coal
@@ -205,85 +205,78 @@ final_plot <- coal + fossil_fuels + nuclear_electric +
 final_plot
 ```
 
-
-
-On pense montrer qqch comme ça, on ajoute temp, on voit que conso plus eélece, donc importe, si trop de prod, tu exportes
-on doit acheter (trop cher elec)
-exporter
-
-
-
-
-
-
-
 ## Plot Data Production
 
 ```{r}
 # Coal Production
-ggplot(data, aes(x = Month, y = Coal_Production)) + 
+cp <- ggplot(data, aes(x = Month, y = Coal_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Coal Production", x = "Date", y = "Value")
 
 # Natural Gas Dry Production
-ggplot(data, aes(x = Month, y = Natural_Gas_Dry_Production)) + 
+ngdp <- ggplot(data, aes(x = Month, y = Natural_Gas_Dry_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Natural Gas Dry Production", x = "Date", y = "Value")
 
 # Crude Oil Production
-ggplot(data, aes(x = Month, y = Crude_Oil_Production)) + 
+cop <- ggplot(data, aes(x = Month, y = Crude_Oil_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Crude Oil Production", x = "Date", y = "Value")
 
 # Natural Gas Plant Liquids Production
-ggplot(data, aes(x = Month, y = Natural_Gas_Plant_Liquids_Production)) + 
+ngplp <- ggplot(data, aes(x = Month, y = Natural_Gas_Plant_Liquids_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Natural Gas Plant Liquids Production", x = "Date", y = "Value")
 
 # Total Fossil Fuels Production
-ggplot(data, aes(x = Month, y = Total_Fossil_Fuels_Production)) + 
+tffp <- ggplot(data, aes(x = Month, y = Total_Fossil_Fuels_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Total Fossil Fuels Production", x = "Date", y = "Value")
 
 # Nuclear Electric Power Production
-ggplot(data, aes(x = Month, y = Nuclear_Electric_Power_Production)) + 
+nepp <- ggplot(data, aes(x = Month, y = Nuclear_Electric_Power_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Nuclear Electrix Power Production", x = "Date", y = "Value")
 
 # Hydroelectric Power Production
-ggplot(data, aes(x = Month, y = Hydroelectric_Power_Production)) + 
+hpp <- ggplot(data, aes(x = Month, y = Hydroelectric_Power_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Hydroelectric Power Production", x = "Date", y = "Value")
 
 # Geothermal Energy Production
-ggplot(data, aes(x = Month, y = Geothermal_Energy_Production)) + 
+gep <- ggplot(data, aes(x = Month, y = Geothermal_Energy_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Geothermal Energy Production", x = "Date", y = "Value")
 
 # Solar Energy Production
-ggplot(data, aes(x = Month, y = Solar_Energy_Production)) + 
+sep <- ggplot(data, aes(x = Month, y = Solar_Energy_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Solar Energy Production", x = "Date", y = "Value")
 
 # Wind Energy Production
-ggplot(data, aes(x = Month, y = Wind_Energy_Production)) + 
+wep <- ggplot(data, aes(x = Month, y = Wind_Energy_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Wind Energy Production", x = "Date", y = "Value")
 
 # Biomass Energy Production
-ggplot(data, aes(x = Month, y = Biomass_Energy_Production)) + 
+bep <- ggplot(data, aes(x = Month, y = Biomass_Energy_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Biomass Energy Production", x = "Date", y = "Value")
 
 # Total Renewable Energy Production
-ggplot(data, aes(x = Month, y = Total_Renewable_Energy_Production)) + 
+trep <- ggplot(data, aes(x = Month, y = Total_Renewable_Energy_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Total Renewable Energy Production", x = "Date", y = "Value")
 
 # Total Primary Energy Production
-ggplot(data, aes(x = Month, y = Total_Primary_Energy_Production)) + 
+tpep <- ggplot(data, aes(x = Month, y = Total_Primary_Energy_Production)) + 
   geom_line() + 
-  labs(title = "Time Series Plot", x = "Date", y = "Value")
+  labs(title = "Total Primary Energy Production", x = "Date", y = "Value")
+
+production <- cp + ngdp + cop + ngplp + tffp + nepp + hpp + gep + sep + wep + bep + trep + tpep +  plot_layout(guides = 'collect') & 
+              theme(legend.position = "bottom")
+
+production
 ```
 
 ## Plot Data Consumption
@@ -359,7 +352,7 @@ ggplot(temperature, aes(x = Date, y = Temperature)) +
   labs(title = "Temperature Time Series", x = "Date", y = "Temperature")
 ```
 
-## All plots together (Production)
+### All plots together (Production)
 
 ```{r}
 ggplot(data, aes(x = Month)) + 
@@ -383,12 +376,12 @@ ggplot(data, aes(x = Month)) +
                                 "Hydroelectric Power Production" = "brown", "Geothermal Energy Production" = "pink",
                                 "Solar Energy Production" = "yellow", "Wind Energy Production" = "grey",
                                 "Biomass Energy Production" = "cyan", "Total Renewable Energy Production" = "magenta",
-                                "Total Primary Energy Production" = "beige")) +
+                                "Total Primary Energy Production" = "darkgreen")) +
   theme_minimal() +
   theme(legend.title = element_blank(), legend.position = "bottom")
 ```
 
-## All plots together (Consumption)
+### All plots together (Consumption)
 
 ```{r}
 ggplot(consumptiondata, aes(x = Month)) + 
@@ -416,7 +409,7 @@ ggplot(consumptiondata, aes(x = Month)) +
   theme(legend.title = element_blank(), legend.position = "bottom")
 ```
 
-## Forecast - Coal Consumption
+### Forecast - Coal Consumption
 
 ```{r}
 # Tsibble
